@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casa en Alquiler por día en Córdoba - Temporario</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -12,768 +12,1310 @@
             padding: 0;
             box-sizing: border-box;
         }
- 
+
         html {
             scroll-behavior: smooth;
         }
- 
+
+        :root {
+            --bg-primary: #0b0f14;
+            --bg-secondary: #111820;
+            --bg-card: #161d27;
+            --bg-card-hover: #1c2533;
+            --accent: #2D9B6E;
+            --accent-light: #3DBF85;
+            --accent-dark: #1E7A52;
+            --accent-glow: rgba(45, 155, 110, 0.25);
+            --warm: #D4A574;
+            --warm-light: #E8C9A8;
+            --text-primary: #E2E8F0;
+            --text-secondary: #8899AA;
+            --text-muted: #556677;
+            --border: #1e2a38;
+            --border-light: #2a3a4d;
+        }
+
         body {
             font-family: 'Open Sans', sans-serif;
-            color: #333;
+            color: var(--text-primary);
             line-height: 1.6;
-            background-color: #FFFFFF;
-            perspective: 1000px;
+            background-color: var(--bg-primary);
+            overflow-x: hidden;
         }
- 
-        /* Header Sticky 3D */
+
+        /* ===== HEADER ===== */
         header {
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px);
+            background: rgba(11, 15, 20, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             z-index: 1000;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            padding: 1rem 2rem;
-            transform: translateZ(50px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.9rem 2rem;
+            transition: all 0.3s ease;
         }
- 
+
+        header.scrolled {
+            padding: 0.6rem 2rem;
+            background: rgba(11, 15, 20, 0.97);
+        }
+
         .header-content {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
- 
+
         .logo {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #A8E6CF 0%, #D0F0F7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--accent-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             transition: transform 0.3s ease;
         }
- 
-        .logo:hover {
-            transform: scale(1.05);
+
+        .logo:hover { transform: scale(1.05); }
+
+        .logo span {
+            color: var(--warm);
         }
- 
+
         .cta-header {
-            background: linear-gradient(135deg, #A8E6CF 0%, #D0F0F7 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
             color: white;
-            padding: 0.7rem 1.5rem;
+            padding: 0.65rem 1.6rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(168, 230, 207, 0.3);
+            box-shadow: 0 4px 20px var(--accent-glow);
             position: relative;
             overflow: hidden;
         }
- 
+
         .cta-header::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2), transparent);
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.15), transparent);
             transition: left 0.5s;
         }
- 
-        .cta-header:hover::before {
-            left: 100%;
-        }
- 
+
+        .cta-header:hover::before { left: 100%; }
+
         .cta-header:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(168, 230, 207, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
         }
- 
-        /* Hero Section con 3D */
+
+        /* ===== HERO ===== */
         .hero {
-            margin-top: 80px;
+            margin-top: 65px;
             min-height: 100vh;
-            background: linear-gradient(135deg, #FFFFFF 0%, #D0F0F7 50%, #A8E6CF 100%);
             display: flex;
             align-items: center;
-            justify-content: center;
             position: relative;
             overflow: hidden;
         }
- 
-        .hero::before {
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.3) saturate(0.8);
+        }
+
+        .hero-bg::after {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(168, 230, 207, 0.2) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(11,15,20,0.95) 0%, rgba(11,15,20,0.6) 50%, rgba(11,15,20,0.85) 100%);
         }
- 
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: -20%;
-            left: -5%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(208, 240, 247, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 8s ease-in-out infinite reverse;
-        }
- 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(30px); }
-        }
- 
+
         .hero-content {
             position: relative;
             z-index: 10;
-            text-align: center;
-            max-width: 900px;
-            padding: 2rem;
-            animation: slideInDown 1s ease-out;
-            transform: translateZ(30px);
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            width: 100%;
         }
- 
-        @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px) translateZ(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) translateZ(30px);
-            }
+
+        .hero-text { animation: fadeInUp 1s ease-out; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
- 
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(45, 155, 110, 0.15);
+            border: 1px solid rgba(45, 155, 110, 0.3);
+            color: var(--accent-light);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         .hero h1 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 4.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #333 0%, #A8E6CF 100%);
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.2rem;
+            color: white;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--accent-light), var(--warm));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 1rem;
-            line-height: 1.2;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
         }
- 
+
         .hero .subtitle {
-            font-size: 1.4rem;
-            color: #666;
+            font-size: 1.15rem;
+            color: var(--text-secondary);
             margin-bottom: 0.5rem;
-            font-weight: 300;
         }
- 
+
         .hero .tagline {
-            font-size: 1.2rem;
-            color: #A8E6CF;
+            font-size: 1.05rem;
+            color: var(--warm);
             margin-bottom: 2rem;
             font-weight: 600;
         }
- 
+
         .cta-buttons {
             display: flex;
             gap: 1rem;
-            justify-content: center;
             flex-wrap: wrap;
         }
- 
+
         .btn-primary {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: linear-gradient(135deg, #A8E6CF 0%, #D0F0F7 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
             color: white;
-            padding: 1.1rem 2.8rem;
+            padding: 1rem 2.4rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: all 0.4s ease;
-            box-shadow: 0 10px 30px rgba(168, 230, 207, 0.3);
+            box-shadow: 0 8px 30px var(--accent-glow);
             cursor: pointer;
             border: none;
             position: relative;
             overflow: hidden;
         }
- 
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255,255,255,0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
- 
-        .btn-primary:hover::after {
-            width: 300px;
-            height: 300px;
-        }
- 
+
         .btn-primary:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 15px 40px rgba(168, 230, 207, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(45, 155, 110, 0.35);
         }
- 
+
         .btn-secondary {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: white;
-            color: #A8E6CF;
-            padding: 1.1rem 2.8rem;
+            background: transparent;
+            color: var(--text-primary);
+            padding: 1rem 2.4rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
-            border: 2px solid #A8E6CF;
+            border: 2px solid var(--border-light);
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(168, 230, 207, 0.2);
         }
- 
+
         .btn-secondary:hover {
-            background: #A8E6CF;
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(168, 230, 207, 0.3);
+            border-color: var(--accent);
+            color: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 155, 110, 0.15);
         }
- 
-        /* CAROUSEL 3D */
+
+        /* Hero Image Card */
+        .hero-image-card {
+            position: relative;
+            animation: fadeInRight 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .hero-image-card img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+        }
+
+        .hero-image-float {
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1rem 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            animation: floatBadge 3s ease-in-out infinite;
+        }
+
+        @keyframes floatBadge {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .hero-image-float .icon-circle {
+            width: 45px; height: 45px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .hero-image-float .float-text strong {
+            display: block;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .hero-image-float .float-text span {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+
+        /* ===== CAROUSEL ===== */
         .carousel-section {
-            padding: 6rem 2rem;
+            padding: 5rem 2rem;
             max-width: 1400px;
             margin: 0 auto;
         }
- 
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-light);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.8rem;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 30px; height: 2px;
+            background: var(--accent);
+        }
+
         .section-title {
             font-family: 'Montserrat', sans-serif;
-            font-size: 2.8rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 3rem;
-            background: linear-gradient(135deg, #333 0%, #A8E6CF 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: white;
         }
- 
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
         .carousel-container {
             position: relative;
-            perspective: 1200px;
-            margin: 3rem 0;
+            margin: 0 auto;
         }
- 
+
         .carousel-wrapper {
             position: relative;
             width: 100%;
-            height: 600px;
+            height: 550px;
             overflow: hidden;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            background: #f0f0f0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            border: 1px solid var(--border);
+            background: var(--bg-card);
         }
- 
+
         .carousel-inner {
             position: relative;
             width: 100%;
             height: 100%;
         }
- 
+
         .carousel-item {
             position: absolute;
             width: 100%;
             height: 100%;
             opacity: 0;
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateX(100%) rotateY(45deg) scale(0.8);
+            transform: scale(1.05);
             z-index: 1;
         }
- 
+
         .carousel-item.active {
             opacity: 1;
-            transform: translateX(0) rotateY(0) scale(1);
+            transform: scale(1);
             z-index: 10;
         }
- 
-        .carousel-item.prev {
-            opacity: 0.3;
-            transform: translateX(-100%) rotateY(-45deg) scale(0.8);
-            z-index: 5;
-        }
- 
+
         .carousel-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
- 
+
+        .carousel-item-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(11,15,20,0.85) 0%, rgba(11,15,20,0.1) 40%, transparent 100%);
+        }
+
         .carousel-item-info {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            padding: 2rem;
+            bottom: 0; left: 0; right: 0;
+            padding: 2.5rem;
             color: white;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.5s ease 0.2s;
         }
- 
+
         .carousel-item.active .carousel-item-info {
             transform: translateY(0);
+            opacity: 1;
         }
- 
+
+        .carousel-item-info .room-tag {
+            display: inline-block;
+            background: rgba(45, 155, 110, 0.3);
+            border: 1px solid rgba(45, 155, 110, 0.5);
+            color: var(--accent-light);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         .carousel-item-info h3 {
             font-family: 'Montserrat', sans-serif;
             font-size: 1.8rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
         }
- 
-        /* Carousel Controls */
+
+        .carousel-item-info p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            max-width: 500px;
+        }
+
         .carousel-controls {
             position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
+            top: 50%; left: 0; right: 0;
             display: flex;
             justify-content: space-between;
-            padding: 0 2rem;
+            padding: 0 1.5rem;
             transform: translateY(-50%);
             z-index: 20;
             pointer-events: none;
         }
- 
+
         .carousel-btn {
-            background: rgba(255,255,255,0.9);
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            background: rgba(22, 29, 39, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-light);
+            width: 52px; height: 52px;
+            border-radius: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            color: #A8E6CF;
+            font-size: 1rem;
+            color: var(--text-primary);
             transition: all 0.3s ease;
             pointer-events: all;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
- 
+
         .carousel-btn:hover {
-            background: #A8E6CF;
+            background: var(--accent);
             color: white;
-            transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(168, 230, 207, 0.4);
+            border-color: var(--accent);
+            transform: scale(1.08);
+            box-shadow: 0 8px 25px var(--accent-glow);
         }
- 
-        /* Carousel Indicators */
+
         .carousel-indicators {
             position: absolute;
-            bottom: 2rem;
+            bottom: 1.5rem;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 1rem;
+            gap: 0.6rem;
             z-index: 20;
         }
- 
+
         .indicator {
-            width: 12px;
-            height: 12px;
+            width: 10px; height: 10px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.25);
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
+            border: none;
         }
- 
+
         .indicator.active {
-            background: #A8E6CF;
-            width: 30px;
-            border-radius: 6px;
-            box-shadow: 0 3px 10px rgba(168, 230, 207, 0.4);
+            background: var(--accent-light);
+            width: 32px;
+            border-radius: 5px;
+            box-shadow: 0 3px 12px var(--accent-glow);
         }
- 
-        .indicator:hover {
-            background: rgba(255,255,255,0.8);
+
+        .indicator:hover { background: rgba(255,255,255,0.5); }
+
+        .carousel-counter {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 20;
+            background: rgba(11,15,20,0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
         }
- 
-        /* Features Grid */
+
+        .carousel-counter span { color: white; font-weight: 700; }
+
+        /* ===== FEATURES ===== */
         .features {
-            padding: 6rem 2rem;
-            background: linear-gradient(135deg, #F5FFFE 0%, #E8F5F7 100%);
+            padding: 5rem 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
         }
- 
+
         .features-content {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
         }
- 
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
         }
- 
+
         .feature-card {
-            background: white;
-            padding: 2.5rem 2rem;
-            border-radius: 15px;
-            text-align: center;
+            background: var(--bg-card);
+            padding: 2rem 1.8rem;
+            border-radius: 16px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(168, 230, 207, 0.2);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
             position: relative;
             overflow: hidden;
         }
- 
+
         .feature-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #A8E6CF, #D0F0F7);
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--warm));
             transform: scaleX(0);
             transform-origin: left;
             transition: transform 0.4s ease;
         }
- 
-        .feature-card:hover::before {
-            transform: scaleX(1);
-        }
- 
+
+        .feature-card:hover::before { transform: scaleX(1); }
+
         .feature-card:hover {
-            transform: translateY(-15px) translateZ(20px);
-            box-shadow: 0 20px 50px rgba(168, 230, 207, 0.25);
-            border-color: rgba(168, 230, 207, 0.5);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border-color: var(--border-light);
+            background: var(--bg-card-hover);
         }
- 
+
         .feature-icon {
-            font-size: 3.5rem;
+            font-size: 2.2rem;
             margin-bottom: 1rem;
+            display: inline-block;
             transition: transform 0.3s ease;
         }
- 
-        .feature-card:hover .feature-icon {
-            transform: scale(1.2) rotate(5deg);
-        }
- 
+
+        .feature-card:hover .feature-icon { transform: scale(1.15) rotate(5deg); }
+
         .feature-card h3 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.4rem;
-            margin-bottom: 0.8rem;
-            color: #333;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            color: white;
         }
- 
+
         .feature-card p {
-            color: #666;
-            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
             line-height: 1.7;
         }
- 
-        /* CTA Final */
-        .cta-final {
-            padding: 6rem 2rem;
-            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
-            color: white;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+
+        /* ===== GALLERY STRIP ===== */
+        .gallery-strip {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
         }
- 
-        .cta-final::before {
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: 250px 250px;
+            gap: 1rem;
+        }
+
+        .gallery-grid .g-item {
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border);
+            cursor: pointer;
+        }
+
+        .gallery-grid .g-item:first-child {
+            grid-row: 1 / 3;
+        }
+
+        .gallery-grid .g-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-grid .g-item:hover img { transform: scale(1.08); }
+
+        .gallery-grid .g-item::after {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(168, 230, 207, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
+            inset: 0;
+            background: linear-gradient(to top, rgba(11,15,20,0.6), transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
- 
+
+        .gallery-grid .g-item:hover::after { opacity: 1; }
+
+        /* ===== FORM SECTION ===== */
+        .form-section {
+            padding: 5rem 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-content {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .form-info {
+            position: sticky;
+            top: 100px;
+        }
+
+        .form-info-image {
+            width: 100%;
+            height: 300px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .form-info-image img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+
+        .form-info h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .form-info > p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .form-perks {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .form-perks li {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .form-perks li i {
+            color: var(--accent-light);
+            font-size: 0.85rem;
+            width: 28px; height: 28px;
+            background: rgba(45, 155, 110, 0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .form-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .form-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-card .form-sub {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-group label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            color: var(--text-primary);
+            font-family: 'Open Sans', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            outline: none;
+            width: 100%;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-group select option {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        /* Radio Toggle */
+        .radio-group {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .radio-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .radio-option input {
+            position: absolute;
+            opacity: 0;
+            width: 0; height: 0;
+        }
+
+        .radio-option label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+            color: var(--text-secondary);
+        }
+
+        .radio-option input:checked + label {
+            border-color: var(--accent);
+            background: rgba(45, 155, 110, 0.12);
+            color: var(--accent-light);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .radio-option label:hover {
+            border-color: var(--border-light);
+        }
+
+        .form-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .form-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px var(--accent-glow);
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(45, 155, 110, 0.35);
+        }
+
+        .form-submit:active { transform: translateY(0); }
+
+        .form-note {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            margin-top: 1rem;
+        }
+
+        /* Success Message */
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .form-success.show { display: block; }
+
+        .form-success .success-icon {
+            width: 70px; height: 70px;
+            background: rgba(45, 155, 110, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: var(--accent-light);
+        }
+
+        .form-success h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-success p { color: var(--text-secondary); }
+
+        /* ===== CTA FINAL ===== */
+        .cta-final {
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .cta-final-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .cta-final-bg img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: brightness(0.15) saturate(0.5);
+        }
+
+        .cta-final-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, var(--bg-primary), rgba(11,15,20,0.7), var(--bg-primary));
+        }
+
+        .cta-final > * {
+            position: relative;
+            z-index: 2;
+        }
+
         .cta-final h2 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 3rem;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: white;
             margin-bottom: 1rem;
-            position: relative;
-            z-index: 2;
         }
- 
+
         .cta-final p {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
+            color: var(--text-secondary);
             margin-bottom: 2.5rem;
-            opacity: 0.9;
-            position: relative;
-            z-index: 2;
         }
- 
+
         .whatsapp-btn {
             display: inline-flex;
             align-items: center;
             gap: 0.8rem;
-            background: linear-gradient(135deg, #25D366 0%, #20BA5C 100%);
+            background: linear-gradient(135deg, #25D366 0%, #128C4F 100%);
             color: white;
-            padding: 1.2rem 3rem;
+            padding: 1.1rem 2.8rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             transition: all 0.4s ease;
-            box-shadow: 0 12px 35px rgba(37, 211, 102, 0.4);
-            position: relative;
-            overflow: hidden;
-            z-index: 2;
+            box-shadow: 0 10px 35px rgba(37, 211, 102, 0.3);
         }
- 
-        .whatsapp-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.6s;
-        }
- 
-        .whatsapp-btn:hover::before {
-            left: 100%;
-        }
- 
+
         .whatsapp-btn:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 18px 45px rgba(37, 211, 102, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 45px rgba(37, 211, 102, 0.4);
         }
- 
-        /* Footer */
+
+        .cta-final .phone-text {
+            margin-top: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ===== FOOTER ===== */
         footer {
-            background: #1a1a1a;
-            color: #999;
-            padding: 3rem 2rem;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 2.5rem 2rem;
             text-align: center;
         }
- 
-        footer p {
-            margin: 0.5rem 0;
-        }
- 
-        /* Scroll Reveal */
+
+        footer p { margin: 0.4rem 0; font-size: 0.85rem; }
+
+        /* ===== SCROLL REVEAL ===== */
         .scroll-reveal {
             opacity: 0;
-            transform: translateY(40px) translateZ(0);
+            transform: translateY(30px);
             transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
         }
- 
+
         .scroll-reveal.visible {
             opacity: 1;
-            transform: translateY(0) translateZ(0);
+            transform: translateY(0);
         }
- 
-        /* Responsive */
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--accent);
+            border-radius: 14px;
+            padding: 1rem 1.5rem;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            z-index: 9999;
+            transform: translateX(150%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toast.show { transform: translateX(0); }
+
+        .toast i { color: var(--accent-light); font-size: 1.2rem; }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
-            .hero h1 {
-                font-size: 3rem;
-            }
- 
-            .carousel-wrapper {
-                height: 450px;
-            }
-        }
- 
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.2rem;
-            }
- 
-            .hero .subtitle {
-                font-size: 1rem;
-            }
- 
-            .cta-buttons {
-                flex-direction: column;
-            }
- 
-            .carousel-wrapper {
-                height: 350px;
-            }
- 
-            .carousel-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
- 
-            .carousel-controls {
-                padding: 0 1rem;
-            }
- 
-            .features-grid {
+            .hero-content {
                 grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
             }
- 
-            .cta-final h2 {
-                font-size: 1.8rem;
+
+            .hero h1 { font-size: 2.8rem; }
+
+            .hero-image-card { max-width: 500px; margin: 0 auto; }
+
+            .cta-buttons { justify-content: center; }
+
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+
+            .form-content { grid-template-columns: 1fr; gap: 2rem; }
+
+            .form-info { position: static; }
+
+            .gallery-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 200px 200px 200px;
             }
+
+            .gallery-grid .g-item:first-child { grid-row: 1 / 3; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .hero .subtitle { font-size: 1rem; }
+
+            .cta-buttons { flex-direction: column; align-items: center; }
+
+            .carousel-wrapper { height: 350px; }
+
+            .carousel-btn { width: 42px; height: 42px; }
+            .carousel-controls { padding: 0 0.8rem; }
+
+            .carousel-item-info h3 { font-size: 1.3rem; }
+            .carousel-item-info { padding: 1.5rem; }
+
+            .features-grid { grid-template-columns: 1fr; }
+
+            .form-row { grid-template-columns: 1fr; }
+
+            .form-card { padding: 1.5rem; }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+
+            .gallery-grid .g-item { height: 220px; }
+            .gallery-grid .g-item:first-child { grid-row: auto; }
+
+            .cta-final h2 { font-size: 1.8rem; }
+
+            .section-title { font-size: 2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.8rem; }
+            .carousel-wrapper { height: 280px; }
+            .radio-group { flex-direction: column; }
         }
     </style>
 </head>
 <body>
+
     <!-- Header -->
-    <header>
+    <header id="mainHeader">
         <div class="header-content">
-            <div class="logo">🏡 Casa Córdoba</div>
-            <a href="https://wa.me/5493516197404?text=Hola%20me%20interesa%20alquilar%20la%20casa%20de%20Córdoba" class="cta-header">Reservar Ahora</a>
+            <div class="logo">
+                <i class="fas fa-house-chimney"></i>
+                Casa <span>Córdoba</span>
+            </div>
+            <a href="#formulario" class="cta-header">
+                <i class="fas fa-calendar-check"></i> Reservar Ahora
+            </a>
         </div>
     </header>
- 
+
     <!-- Hero Section -->
     <section class="hero">
+        <div class="hero-bg">
+            <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1400&h=800&fit=crop" alt="Fachada de casa">
+        </div>
         <div class="hero-content">
-            <h1>Casa en Alquiler por día</h1>
-            <p class="subtitle">Córdoba • Temporario</p>
-            <p class="tagline">Tu refugio ideal para descansar con estilo</p>
-            <div class="cta-buttons">
-                <a href="#carousel" class="btn-primary">
-                    <i class="fas fa-images"></i> Ver Galería
-                </a>
-                <a href="https://wa.me/5493516197404?text=Hola%20me%20interesa%20alquilar%20la%20casa%20de%20Córdoba" class="btn-secondary">
-                    <i class="fas fa-phone"></i> Contactar
-                </a>
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <i class="fas fa-star"></i> Alquiler Temporario en Córdoba
+                </div>
+                <h1>Tu refugio ideal <span class="highlight">en Córdoba</span></h1>
+                <p class="subtitle">Casa completa por día — Ubicación céntrica</p>
+                <p class="tagline">Descansá con estilo, comodidad y los mejores precios</p>
+                <div class="cta-buttons">
+                    <a href="#carousel" class="btn-primary">
+                        <i class="fas fa-images"></i> Ver Galería
+                    </a>
+                    <a href="#formulario" class="btn-secondary">
+                        <i class="fas fa-pen-to-square"></i> Hacer Consulta
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image-card">
+                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=500&fit=crop" alt="Interior de la casa">
+                <div class="hero-image-float">
+                    <div class="icon-circle">⭐</div>
+                    <div class="float-text">
+                        <strong>Excelente</strong>
+                        <span>Reservas confirmadas</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
- 
+
     <!-- Carousel 3D -->
     <section class="carousel-section" id="carousel">
-        <h2 class="section-title">Galería de la Casa</h2>
-        
-        <div class="carousel-container">
+        <div class="scroll-reveal">
+            <div class="section-label">Espacios</div>
+            <h2 class="section-title">Galería de la Casa</h2>
+            <p class="section-subtitle">Recorré cada rincón de tu próximo hogar temporario en Córdoba</p>
+        </div>
+
+        <div class="carousel-container scroll-reveal">
             <div class="carousel-wrapper">
                 <div class="carousel-inner">
-                    <!-- ITEM 1: Cocina/Patio -->
                     <div class="carousel-item active">
                         <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=600&fit=crop" alt="Área exterior y cocina">
+                        <div class="carousel-item-overlay"></div>
                         <div class="carousel-item-info">
-                            <h3>🏠 Exterior y Cocina</h3>
-                            <p>Espacio exterior con parrilla y cocina totalmente equipada</p>
+                            <div class="room-tag">Exterior</div>
+                            <h3>Exterior y Cocina</h3>
+                            <p>Espacio exterior con parrilla y cocina totalmente equipada para disfrutar al aire libre</p>
                         </div>
                     </div>
- 
-                    <!-- ITEM 2: Dormitorio Principal -->
+
                     <div class="carousel-item">
-                        <img src="https://images.unsplash.com/photo-1540932239986-310128078ceb?w=1200&h=600&fit=crop" alt="Dormitorio confortable">
+                        <img src="https://images.unsplash.com/photo-1540932239986-310128078ceb?w=1200&h=600&fit=crop" alt="Dormitorio principal">
+                        <div class="carousel-item-overlay"></div>
                         <div class="carousel-item-info">
-                            <h3>🛏️ Dormitorio Principal</h3>
-                            <p>Habitación espaciosa y acogedora con camas cómodas</p>
+                            <div class="room-tag">Dormitorio</div>
+                            <h3>Dormitorio Principal</h3>
+                            <p>Habitación espaciosa y acogedora con camas cómodas para un descanso reparador</p>
                         </div>
                     </div>
- 
-                    <!-- ITEM 3: Comedor/Sala -->
+
                     <div class="carousel-item">
                         <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=600&fit=crop" alt="Comedor moderno">
+                        <div class="carousel-item-overlay"></div>
                         <div class="carousel-item-info">
-                            <h3>🍽️ Comedor y Sala</h3>
-                            <p>Espacio común elegante para disfrutar en familia</p>
+                            <div class="room-tag">Living</div>
+                            <h3>Comedor y Sala</h3>
+                            <p>Espacio común elegante y luminoso para compartir momentos en familia</p>
                         </div>
                     </div>
- 
-                    <!-- ITEM 4: Dormitorio Secundario -->
+
                     <div class="carousel-item">
                         <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&h=600&fit=crop" alt="Dormitorio secundario">
+                        <div class="carousel-item-overlay"></div>
                         <div class="carousel-item-info">
-                            <h3>🛏️ Dormitorio Secundario</h3>
-                            <p>Habitación adicional con todas las comodidades</p>
+                            <div class="room-tag">Dormitorio</div>
+                            <h3>Dormitorio Secundario</h3>
+                            <p>Habitación adicional con todas las comodidades para mayor capacidad</p>
                         </div>
                     </div>
- 
-                    <!-- ITEM 5: Baño -->
+
                     <div class="carousel-item">
                         <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=1200&h=600&fit=crop" alt="Baño moderno">
+                        <div class="carousel-item-overlay"></div>
                         <div class="carousel-item-info">
-                            <h3>🚿 Baño Moderno</h3>
-                            <p>Baños limpios y bien equipados para tu comodidad</p>
+                            <div class="room-tag">Baño</div>
+                            <h3>Baño Moderno</h3>
+                            <p>Baño completo y bien equipado para tu máxima comodidad</p>
                         </div>
                     </div>
- 
-                    <!-- ITEM 6: Fachada -->
+
                     <div class="carousel-item">
-                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&h=600&fit=crop" alt="Fachada de la casa">
+                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200&h=600&fit=crop" alt="Fachada">
+                        <div class="carousel-item-overlay"></div>
                         <div class="carousel-item-info">
-                            <h3>🏘️ Ubicación Perfecta</h3>
-                            <p>Casa ubicada en una zona céntrica de Córdoba</p>
+                            <div class="room-tag">Ubicación</div>
+                            <h3>Fachada y Entorno</h3>
+                            <p>Casa bien ubicada en zona céntrica de Córdoba, segura y accesible</p>
                         </div>
                     </div>
- 
-                    <!-- ITEM 7: Detalles -->
+
                     <div class="carousel-item">
-                        <img src="https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=1200&h=600&fit=crop" alt="Detalles de la casa">
+                        <img src="https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=1200&h=600&fit=crop" alt="Detalles">
+                        <div class="carousel-item-overlay"></div>
                         <div class="carousel-item-info">
-                            <h3>✨ Detalles Especiales</h3>
-                            <p>Cada rincón cuidado para tu máximo confort</p>
+                            <div class="room-tag">Detalles</div>
+                            <h3>Detalles Especiales</h3>
+                            <p>Cada rincón pensado con cuidado para tu mayor bienestar</p>
                         </div>
                     </div>
                 </div>
- 
-                <!-- Controles -->
+
+                <div class="carousel-counter">
+                    <span id="currentNum">01</span> / <span id="totalNum">07</span>
+                </div>
+
                 <div class="carousel-controls">
-                    <button class="carousel-btn" id="prevBtn">
+                    <button class="carousel-btn" id="prevBtn" aria-label="Anterior">
                         <i class="fas fa-chevron-left"></i>
                     </button>
-                    <button class="carousel-btn" id="nextBtn">
+                    <button class="carousel-btn" id="nextBtn" aria-label="Siguiente">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
- 
-                <!-- Indicadores -->
-                <div class="carousel-indicators">
-                    <div class="indicator active" data-slide="0"></div>
-                    <div class="indicator" data-slide="1"></div>
-                    <div class="indicator" data-slide="2"></div>
-                    <div class="indicator" data-slide="3"></div>
-                    <div class="indicator" data-slide="4"></div>
-                    <div class="indicator" data-slide="5"></div>
-                    <div class="indicator" data-slide="6"></div>
+
+                <div class="carousel-indicators" id="indicators">
+                    <button class="indicator active" data-slide="0" aria-label="Slide 1"></button>
+                    <button class="indicator" data-slide="1" aria-label="Slide 2"></button>
+                    <button class="indicator" data-slide="2" aria-label="Slide 3"></button>
+                    <button class="indicator" data-slide="3" aria-label="Slide 4"></button>
+                    <button class="indicator" data-slide="4" aria-label="Slide 5"></button>
+                    <button class="indicator" data-slide="5" aria-label="Slide 6"></button>
+                    <button class="indicator" data-slide="6" aria-label="Slide 7"></button>
                 </div>
             </div>
         </div>
     </section>
- 
+
+    <!-- Gallery Strip -->
+    <section class="gallery-strip">
+        <div class="scroll-reveal">
+            <div class="section-label">Vistazo rápido</div>
+            <h2 class="section-title">Momentos que te esperan</h2>
+            <p class="section-subtitle">Imaginá despertar en este lugar todos los días de tu estadía</p>
+        </div>
+        <div class="gallery-grid scroll-reveal">
+            <div class="g-item">
+                <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop" alt="Cocina exterior">
+            </div>
+            <div class="g-item">
+                <img src="https://images.unsplash.com/photo-1540932239986-310128078ceb?w=500&h=350&fit=crop" alt="Dormitorio">
+            </div>
+            <div class="g-item">
+                <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=500&h=350&fit=crop" alt="Baño">
+            </div>
+            <div class="g-item">
+                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500&h=350&fit=crop" alt="Living">
+            </div>
+            <div class="g-item">
+                <img src="https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=500&h=350&fit=crop" alt="Detalles">
+            </div>
+        </div>
+    </section>
+
     <!-- Features -->
     <section class="features">
         <div class="features-content">
-            <h2 class="section-title">¿Por qué elegir nuestra casa?</h2>
+            <div class="features-header scroll-reveal">
+                <div class="section-label" style="justify-content: center;">Ventajas</div>
+                <h2 class="section-title">¿Por qué elegir nuestra casa?</h2>
+                <p class="section-subtitle" style="margin: 0 auto;">Todo lo que necesitás en un solo lugar, pensado para que tu estadía sea perfecta</p>
+            </div>
             <div class="features-grid">
                 <div class="feature-card scroll-reveal">
                     <div class="feature-icon">🛏️</div>
                     <h3>Cómodo y espacioso</h3>
-                    <p>Habitaciones acogedoras con toda la comodidad que necesitás para un descanso perfecto</p>
+                    <p>Habitaciones acogedoras con toda la comodidad que necesitás para descansar perfectamente</p>
                 </div>
                 <div class="feature-card scroll-reveal">
                     <div class="feature-icon">📍</div>
                     <h3>Ubicación céntrica</h3>
-                    <p>Perfectamente situado en Córdoba, cerca de todos los servicios y atracciones turísticas</p>
+                    <p>Situado en Córdoba, cerca de todos los servicios y atractivos turísticos de la ciudad</p>
                 </div>
                 <div class="feature-card scroll-reveal">
                     <div class="feature-icon">⚡</div>
@@ -783,105 +1325,388 @@
                 <div class="feature-card scroll-reveal">
                     <div class="feature-icon">💰</div>
                     <h3>Precio accesible</h3>
-                    <p>Alquileres diarios con excelente relación precio-calidad. Sin sorpresas</p>
+                    <p>Alquileres diarios con excelente relación precio-calidad. Sin gastos ocultos ni sorpresas</p>
                 </div>
                 <div class="feature-card scroll-reveal">
                     <div class="feature-icon">🔒</div>
                     <h3>Seguro y confiable</h3>
-                    <p>Propiedad verificada con reseñas de clientes satisfechos. Garantía de confianza</p>
+                    <p>Propiedad verificada con reseñas de huéspedes satisfechos. Garantía total de confianza</p>
                 </div>
                 <div class="feature-card scroll-reveal">
                     <div class="feature-icon">⏰</div>
                     <h3>Check-in flexible</h3>
-                    <p>Horarios flexibles de entrada y salida para tu comodidad total</p>
+                    <p>Horarios flexibles de entrada y salida coordinados para tu mayor comodidad</p>
                 </div>
             </div>
         </div>
     </section>
- 
+
+    <!-- Form Section -->
+    <section class="form-section" id="formulario">
+        <div class="form-content">
+            <div class="form-info scroll-reveal">
+                <div class="form-info-image">
+                    <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=600&h=400&fit=crop" alt="Habitación acogedora">
+                </div>
+                <div class="section-label">Reservá ahora</div>
+                <h2>Solicitá tu fecha y te confirmamos en minutos</h2>
+                <p>Completá el formulario con tus datos y fechas deseadas. Nos comunicamos con vos a la brevedad para confirmar disponibilidad y precio final.</p>
+                <ul class="form-perks">
+                    <li><i class="fas fa-check"></i> Respuesta en menos de 1 hora</li>
+                    <li><i class="fas fa-check"></i> Sin compromiso ni anticipo hasta confirmar</li>
+                    <li><i class="fas fa-check"></i> Precios según cantidad de noches</li>
+                    <li><i class="fas fa-check"></i> Mascotas bienvenidas con aviso previo</li>
+                    <li><i class="fas fa-check"></i> Cocheras disponibles si contás con auto</li>
+                </ul>
+            </div>
+
+            <div class="form-card scroll-reveal">
+                <div id="formFields">
+                    <h3>Consultar disponibilidad</h3>
+                    <p class="form-sub">Completá todos los campos para una respuesta más rápida</p>
+
+                    <form id="reservationForm" novalidate>
+                        <!-- Nombre -->
+                        <div class="form-row full">
+                            <div class="form-group">
+                                <label for="nombre">Nombre completo</label>
+                                <input type="text" id="nombre" name="nombre" placeholder="Ej: María García" required>
+                            </div>
+                        </div>
+
+                        <!-- Fechas -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fechaLlegada">Fecha de llegada</label>
+                                <input type="date" id="fechaLlegada" name="fechaLlegada" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="fechaSalida">Fecha de salida</label>
+                                <input type="date" id="fechaSalida" name="fechaSalida" required>
+                            </div>
+                        </div>
+
+                        <hr class="form-divider">
+
+                        <!-- Personas -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="adultos">Adultos</label>
+                                <select id="adultos" name="adultos" required>
+                                    <option value="" disabled selected>Seleccionar</option>
+                                    <option value="1">1 adulto</option>
+                                    <option value="2">2 adultos</option>
+                                    <option value="3">3 adultos</option>
+                                    <option value="4">4 adultos</option>
+                                    <option value="5">5 adultos</option>
+                                    <option value="6">6+ adultos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ninos">Niños (2-12 años)</label>
+                                <select id="ninos" name="ninos">
+                                    <option value="0" selected>Ninguno</option>
+                                    <option value="1">1 niño</option>
+                                    <option value="2">2 niños</option>
+                                    <option value="3">3 niños</option>
+                                    <option value="4">4+ niños</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row full">
+                            <div class="form-group">
+                                <label for="bebes">Bebés (0-2 años)</label>
+                                <select id="bebes" name="bebes">
+                                    <option value="0" selected>Ninguno</option>
+                                    <option value="1">1 bebé</option>
+                                    <option value="2">2 bebés</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr class="form-divider">
+
+                        <!-- Auto -->
+                        <div class="form-row full">
+                            <div class="form-group">
+                                <label>¿Contás con auto?</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="autoSi" name="auto" value="si" required>
+                                        <label for="autoSi"><i class="fas fa-car"></i> Sí</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="autoNo" name="auto" value="no">
+                                        <label for="autoNo"><i class="fas fa-person-walking"></i> No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mascota -->
+                        <div class="form-row full">
+                            <div class="form-group">
+                                <label>¿Traés mascota?</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="mascotaSi" name="mascota" value="si" required>
+                                        <label for="mascotaSi"><i class="fas fa-paw"></i> Sí</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="mascotaNo" name="mascota" value="no">
+                                        <label for="mascotaNo"><i class="fas fa-ban"></i> No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="form-divider">
+
+                        <!-- Contacto -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">E-mail</label>
+                                <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="telefono">Teléfono</label>
+                                <input type="tel" id="telefono" name="telefono" placeholder="Ej: 351 619-7404" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="form-submit">
+                            <i class="fas fa-paper-plane"></i> Enviar Consulta
+                        </button>
+
+                        <p class="form-note">
+                            <i class="fas fa-lock"></i> Tus datos están seguros. No compartimos tu información con terceros.
+                        </p>
+                    </form>
+                </div>
+
+                <!-- Success State -->
+                <div class="form-success" id="formSuccess">
+                    <div class="success-icon">
+                        <i class="fas fa-circle-check"></i>
+                    </div>
+                    <h3>¡Consulta enviada!</h3>
+                    <p>Recibimos tu solicitud correctamente. Nos pondremos en contacto contigo a la brevedad para confirmar disponibilidad y precio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Final -->
     <section class="cta-final">
-        <h2>¿Listo para tu próxima escapada?</h2>
-        <p>Contactanos ahora y reservá tu fecha en Córdoba</p>
-        <a href="https://wa.me/5493516197404?text=Hola%20me%20interesa%20alquilar%20la%20casa%20de%20Córdoba%20por%20favor%20dame%20disponibilidad%20y%20precios" class="whatsapp-btn">
-            💬 Contactar por WhatsApp
-        </a>
-        <p style="margin-top: 1.5rem; opacity: 0.7;">📞 Teléfono: 0351-619-7404</p>
+        <div class="cta-final-bg">
+            <img src="https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=1400&h=600&fit=crop" alt="Detalles de la casa">
+        </div>
+        <div class="scroll-reveal">
+            <h2>¿Listo para tu próxima escapada?</h2>
+            <p>Contactanos ahora por WhatsApp y reservá tu fecha en Córdoba</p>
+            <a href="https://wa.me/5493516197404?text=Hola%20me%20interesa%20alquilar%20la%20casa%20de%20Córdoba%20por%20favor%20dame%20disponibilidad%20y%20precios" class="whatsapp-btn" target="_blank">
+                <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+            </a>
+            <p class="phone-text">📞 También podés llamar al 0351-619-7404</p>
+        </div>
     </section>
- 
+
     <!-- Footer -->
     <footer>
         <p>&copy; 2024 Casa Alquiler Córdoba. Todos los derechos reservados.</p>
-        <p>Alquileres temporarios • Confort garantizado • Tu descanso merece un lugar con alma</p>
+        <p>Alquileres temporarios · Confort garantizado · Tu descanso merece un lugar con alma</p>
     </footer>
- 
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-circle-exclamation"></i>
+        <span id="toastMsg">Mensaje</span>
+    </div>
+
     <script>
-        // Carousel Logic
+        // ===== HEADER SCROLL =====
+        const header = document.getElementById('mainHeader');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ===== CAROUSEL =====
         let currentSlide = 0;
+        let autoPlayTimer = null;
         const slides = document.querySelectorAll('.carousel-item');
         const indicators = document.querySelectorAll('.indicator');
         const totalSlides = slides.length;
- 
+        const currentNum = document.getElementById('currentNum');
+        const totalNum = document.getElementById('totalNum');
+
+        totalNum.textContent = String(totalSlides).padStart(2, '0');
+
         function showSlide(n) {
-            slides.forEach((slide, index) => {
-                slide.classList.remove('active', 'prev');
-                if (index === n) {
-                    slide.classList.add('active');
-                } else if (index === (n - 1 + totalSlides) % totalSlides) {
-                    slide.classList.add('prev');
-                }
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === n) slide.classList.add('active');
             });
- 
-            indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === n);
+            indicators.forEach((ind, i) => {
+                ind.classList.toggle('active', i === n);
             });
+            currentNum.textContent = String(n + 1).padStart(2, '0');
         }
- 
+
         function nextSlide() {
             currentSlide = (currentSlide + 1) % totalSlides;
             showSlide(currentSlide);
+            resetAutoPlay();
         }
- 
+
         function prevSlide() {
             currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
             showSlide(currentSlide);
+            resetAutoPlay();
         }
- 
+
+        function resetAutoPlay() {
+            clearInterval(autoPlayTimer);
+            autoPlayTimer = setInterval(nextSlide, 5000);
+        }
+
         document.getElementById('nextBtn').addEventListener('click', nextSlide);
         document.getElementById('prevBtn').addEventListener('click', prevSlide);
- 
-        indicators.forEach(indicator => {
-            indicator.addEventListener('click', (e) => {
+
+        indicators.forEach(ind => {
+            ind.addEventListener('click', (e) => {
                 currentSlide = parseInt(e.target.dataset.slide);
                 showSlide(currentSlide);
+                resetAutoPlay();
             });
         });
- 
-        // Auto-advance carousel
-        setInterval(nextSlide, 5000);
- 
-        // Scroll Reveal Animation
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
- 
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
- 
-        document.querySelectorAll('.scroll-reveal').forEach(el => {
-            observer.observe(el);
-        });
- 
-        // Keyboard Navigation
+
+        // Touch/Swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const carouselWrapper = document.querySelector('.carousel-wrapper');
+
+        carouselWrapper.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        carouselWrapper.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                diff > 0 ? nextSlide() : prevSlide();
+            }
+        }, { passive: true });
+
+        // Keyboard
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') nextSlide();
             if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        autoPlayTimer = setInterval(nextSlide, 5000);
+
+        // ===== SCROLL REVEAL =====
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, i * 100);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+        // ===== TOAST =====
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        // ===== FORM =====
+        const form = document.getElementById('reservationForm');
+        const formFields = document.getElementById('formFields');
+        const formSuccess = document.getElementById('formSuccess');
+
+        // Set min date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('fechaLlegada').setAttribute('min', today);
+        document.getElementById('fechaSalida').setAttribute('min', today);
+
+        // Auto-update salida min when llegada changes
+        document.getElementById('fechaLlegada').addEventListener('change', function() {
+            document.getElementById('fechaSalida').setAttribute('min', this.value);
+            if (document.getElementById('fechaSalida').value && document.getElementById('fechaSalida').value <= this.value) {
+                document.getElementById('fechaSalida').value = '';
+            }
+        });
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Validations
+            const nombre = document.getElementById('nombre').value.trim();
+            const fechaLlegada = document.getElementById('fechaLlegada').value;
+            const fechaSalida = document.getElementById('fechaSalida').value;
+            const adultos = document.getElementById('adultos').value;
+            const email = document.getElementById('email').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const auto = document.querySelector('input[name="auto"]:checked');
+            const mascota = document.querySelector('input[name="mascota"]:checked');
+
+            if (!nombre) { showToast('Por favor ingresá tu nombre completo'); return; }
+            if (!fechaLlegada) { showToast('Seleccioná una fecha de llegada'); return; }
+            if (!fechaSalida) { showToast('Seleccioná una fecha de salida'); return; }
+            if (fechaSalida <= fechaLlegada) { showToast('La fecha de salida debe ser posterior a la de llegada'); return; }
+            if (!adultos) { showToast('Seleccioná la cantidad de adultos'); return; }
+            if (!auto) { showToast('Indicá si contás con auto'); return; }
+            if (!mascota) { showToast('Indicá si traés mascota'); return; }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('Ingresá un e-mail válido'); return; }
+            if (!telefono || telefono.length < 8) { showToast('Ingresá un teléfono válido (mínimo 8 dígitos)'); return; }
+
+            // Build WhatsApp message with form data
+            const ninos = document.getElementById('ninos').value;
+            const bebes = document.getElementById('bebes').value;
+            const totalPersonas = parseInt(adultos) + parseInt(ninos) + parseInt(bebes);
+
+            const msg = `Hola! Quiero consultar disponibilidad para la casa de Córdoba:
+
+👤 Nombre: ${nombre}
+📅 Llegada: ${fechaLlegada}
+📅 Salida: ${fechaSalida}
+👥 Total personas: ${totalPersonas} (${adultos} adultos, ${ninos} niños, ${bebes} bebés)
+🚗 Auto: ${auto.value === 'si' ? 'Sí' : 'No'}
+🐾 Mascota: ${mascota.value === 'si' ? 'Sí' : 'No'}
+📧 Email: ${email}
+📞 Teléfono: ${telefono}
+
+Gracias!`;
+
+            const encodedMsg = encodeURIComponent(msg);
+
+            // Show success
+            formFields.style.display = 'none';
+            formSuccess.classList.add('show');
+
+            // Open WhatsApp after short delay
+            setTimeout(() => {
+                window.open(`https://wa.me/5493516197404?text=${encodedMsg}`, '_blank');
+            }, 1500);
+        });
+
+        // ===== SMOOTH SCROLL FOR ANCHOR LINKS =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
         });
     </script>
 </body>
