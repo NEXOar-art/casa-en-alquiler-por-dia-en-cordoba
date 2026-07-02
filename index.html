@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Dashboard profesional para análisis de mantenimiento preventivo y predictivo de flota vehicular"/>
+  <title>Analytics Pro | Mantenimiento Predictivo</title>
+  
+  <!-- Fuentes y librerías -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+  
+  <style>
+    /* ========================================
+       POWER BI THEME - VARIABLES
+       ======================================== */
+    :root {
+      /* Paleta Power BI */
+      --pbi-bg: #f3f2f1;
+      --pbi-surface: #ffffff;
+      --pbi-border: #edebe9;
+      --pbi-text: #323130;
+      --pbi-text-secondary: #605e5c;
+      --pbi-primary: #0078d4;
+      --pbi-primary-hover: #106ebe;
+      --pbi-success: #107c10;
+      --pbi-warning: #ffb900;
+      --pbi-danger: #d83b01;
+      --pbi-info: #00bcf2;
+      
+      /* Métricas */
+      --metric-up: #107c10;
+      --metric-down: #d13438;
+      --metric-neutral: #605e5c;
+      
+      /* Sombras y bordes */
+      --shadow-card: 0 1.6px 3.6px 0 rgba(0,0,0,0.132), 0 0.3px 0.9px 0 rgba(0,0,0,0.108);
+      --shadow-hover: 0 3.2px 7.2px 0 rgba(0,0,0,0.132), 0 0.6px 1.8px 0 rgba(0,0,0,0.108);
+      --border-radius: 4px;
+      --border-radius-lg: 8px;
+      
+      /* Espaciado */
+      --spacing-xxs: 4px;
+      --spacing-xs: 8px;
+      --spacing-sm: 12px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+      
+      /* Tipografía */
+      --font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-size-xs: 11px;
+      --font-size-sm: 12px;
+      --font-size-base: 14px;
+      --font-size-lg: 16px;
+      --font-size-xl: 20px;
+      --font-size-xxl: 28px;
+      
+      /* Transiciones */
+      --transition: 150ms ease-in-out;
+    }
+
+    /* ========================================
+       RESET & BASE
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--pbi-bg);
+      color: var(--pbi-text);
+      font-size: var(--font-size-base);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========================================
+       LAYOUT PRINCIPAL
+       ======================================== */
+    .app-container {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      min-height: 100vh;
+      max-width: 1920px;
+      margin: 0 auto;
+    }
+
+    /* ========================================
+       HEADER PRINCIPAL
+       ======================================== */
+    .main-header {
+      background: var(--pbi-surface);
+      border-bottom: 1px solid var(--pbi-border);
+      padding: var(--spacing-sm) var(--spacing-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-card);
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .header-logo {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--pbi-primary), var(--pbi-info));
+      border-radius: var(--border-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .header-title {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      color: var(--pbi-text);
+    }
+
+    .header-subtitle {
+      font-size: var(--font-size-xs);
+      color: var(--pbi-text-secondary);
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    /* ========================================
+       BARRA DE FILTROS (POWER BI STYLE)
+       ======================================== */
+    .filter-bar {
+      background: var(--pbi-surface);
+      border-bottom: 1px solid var(--pbi-border);
+      padding: var(--spacing-sm) var(--spacing-lg);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--spacing-md);
+      position: sticky;
+      top: 72px;
+      z-index: 99;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      padding-right: var(--spacing-md);
+      border-right: 1px solid var(--pbi-border);
+    }
+
+    .filter-group:last-child {
+      border-right: none;
+      padding-right: 0;
+    }
+
+    .filter-label {
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: var(--pbi-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .filter-control {
+      min-width: 140px;
+      padding: var(--spacing-xxs) var(--spacing-sm);
+      border: 1px solid var(--pbi-border);
+      border-radius: var(--border-radius);
+      background: var(--pbi-surface);
+      font-size: var(--font-size-sm);
+      color: var(--pbi-text);
+      cursor: pointer;
+      transition: border-color var(--transition);
+    }
+
+    .filter-control:hover,
+    .filter-control:focus {
+      border-color: var(--pbi-primary);
+      outline: none;
+    }
+
+    .filter-control[type="date"] {
+      min-width: 120px;
+    }
+
+    .filter-btn {
+      padding: var(--spacing-xxs) var(--spacing-sm);
+      background: var(--pbi-surface);
+      border: 1px solid var(--pbi-border);
+      border-radius: var(--border-radius);
+      font-size: var(--font-size-sm);
+      color: var(--pbi-text);
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--pbi-primary);
+      border-color: var(--pbi-primary);
+      color: white;
+    }
+
+    .filter-btn-apply {
+      background: var(--pbi-primary);
+      color: white;
+      border: none;
+      padding: 6px 16px;
+      font-weight: 500;
+      margin-left: auto;
+    }
+
+    .filter-btn-apply:hover {
+      background: var(--pbi-primary-hover);
+    }
+
+    .filter-btn-reset {
+      background: transparent;
+      color: var(--pbi-text-secondary);
+      border: 1px solid var(--pbi-border);
+      padding: 6px 12px;
+    }
+
+    .filter-btn-reset:hover {
+      background: var(--pbi-bg);
+      color: var(--pbi-text);
+    }
+
+    /* ========================================
+       CONTENIDO PRINCIPAL
+       ======================================== */
+    .dashboard-content {
+      padding: var(--spacing-lg);
+      display: grid;
+      gap: var(--spacing-lg);
+    }
+
+    /* ========================================
+       TARJETAS KPI (POWER BI STYLE)
+       ======================================== */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--spacing-md);
+    }
+
+    .kpi-card {
+      background: var(--pbi-surface);
+      border: 1px solid var(--pbi-border);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-md);
+      box-shadow: var(--shadow-card);
+      transition: box-shadow var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--pbi-primary);
+    }
+
+    .kpi-card--warning::before { background: var(--pbi-warning); }
+    .kpi-card--danger::before { background: var(--pbi-danger); }
+    .kpi-card--success::before { background: var(--pbi-success); }
+
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .kpi-title {
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: var(--pbi-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.3;
+    }
+
+    .kpi-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--pbi-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .kpi-value {
+      font-size: var(--font-size-xxl);
+      font-weight: 600;
+      color: var(--pbi-text);
+      line-height: 1.1;
+      margin-bottom: var(--spacing-xxs);
+    }
+
+    .kpi-trend {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--font-size-xs);
+      font-weight: 500;
+    }
+
+    .kpi-trend--up { color: var(--metric-up); }
+    .kpi-trend--down { color: var(--metric-down); }
+    .kpi-trend--neutral { color: var(--metric-neutral); }
+
+    .kpi-subtitle {
+      font-size: var(--font-size-xs);
+      color: var(--pbi-text-secondary);
+      margin-top: var(--spacing-xxs);
+    }
+
+    /* ========================================
+       SECCIÓN DE GRÁFICOS
+       ======================================== */
+    .charts-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: var(--spacing-lg);
+    }
+
+    .chart-card {
+      background: var(--pbi-surface);
+      border: 1px solid var(--pbi-border);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      min-height: 400px;
+    }
+
+    .chart-card__header {
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-bottom: 1px solid var(--pbi-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chart-card__title {
+      font-size: var(--font-size-base);
+      font-weight: 600;
+      color: var(--pbi-text);
+    }
+
+    .chart-card__actions {
+      display: flex;
+      gap: var(--spacing-xxs);
+    }
+
+    .chart-btn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--pbi-border);
+      border-radius: var(--border-radius);
+      background: var(--pbi-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--pbi-text-secondary);
+      transition: all var(--transition);
+    }
+
+    .chart-btn:hover {
+      background: var(--pbi-bg);
+      color: var(--pbi-text);
+      border-color: var(--pbi-primary);
+    }
+
+    .chart-card__body {
+      flex: 1;
+      padding: var(--spacing-md);
+      min-height: 0;
+      position: relative;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      min-height: 300px;
+    }
+
+    /* ========================================
+       PANEL PREDICTIVO
+       ======================================== */
+    .predictive-panel {
+      background: var(--pbi-surface);
+      border: 1px solid var(--pbi-border);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: var(--spacing-md);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-lg);
+    }
+
+    .predictive-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .predictive-title {
+      font-size: var(--font-size-base);
+      font-weight: 600;
+      color: var(--pbi-text);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+
+    .predictive-title::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      background: var(--pbi-info);
+      border-radius: 2px;
+    }
+
+    .alert-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+
+    .alert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-sm);
+      background: var(--pbi-bg);
+      border-radius: var(--border-radius);
+      border-left: 3px solid var(--pbi-warning);
+    }
+
+    .alert-item--high {
+      border-left-color: var(--pbi-danger);
+      background: #fef6f5;
+    }
+
+    .alert-item--low {
+      border-left-color: var(--pbi-success);
+      background: #f1f9f1;
+    }
+
+    .alert-icon {
+      font-size: 18px;
+      margin-top: 2px;
+    }
+
+    .alert-content h4 {
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .alert-content p {
+      font-size: var(--font-size-xs);
+      color: var(--pbi-text-secondary);
+      line-height: 1.4;
+    }
+
+    .alert-meta {
+      font-size: var(--font-size-xs);
+      color: var(--pbi-text-secondary);
+      margin-top: var(--spacing-xxs);
+    }
+
+    /* ========================================
+       TABLA DE DATOS
+       ======================================== */
+    .data-table-container {
+      background: var(--pbi-surface);
+      border: 1px solid var(--pbi-border);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-bottom: 1px solid var(--pbi-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .table-title {
+      font-size: var(--font-size-base);
+      font-weight: 600;
+    }
+
+    .table-actions {
+      display: flex;
+      gap: var(--spacing-xs);
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--font-size-sm);
+    }
+
+    .table th {
+      background: var(--pbi-bg);
+      padding: var(--spacing-sm) var(--spacing-md);
+      text-align: left;
+      font-weight: 600;
+      color: var(--pbi-text-secondary);
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--pbi-border);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .table th:hover {
+      background: #e1dfdd;
+    }
+
+    .table th.sorted-asc::after {
+      content: ' ▲';
+      font-size: 10px;
+    }
+
+    .table th.sorted-desc::after {
+      content: ' ▼';
+      font-size: 10px;
+    }
+
+    .table td {
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-bottom: 1px solid var(--pbi-border);
+      color: var(--pbi-text);
+    }
+
+    .table tr:hover {
+      background: #f8f8f8;
+    }
+
+    .table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .badge--success {
+      background: #dff6dd;
+      color: var(--pbi-success);
+    }
+
+    .badge--warning {
+      background: #fff4ce;
+      color: #9d6b00;
+    }
+
+    .badge--danger {
+      background: #fde7e9;
+      color: var(--pbi-danger);
+    }
+
+    .badge--info {
+      background: #e0f4fa;
+      color: var(--pbi-info);
+    }
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+    .dashboard-footer {
+      padding: var(--spacing-sm) var(--spacing-lg);
+      text-align: center;
+      font-size: var(--font-size-xs);
+      color: var(--pbi-text-secondary);
+      border-top: 1px solid var(--pbi-border);
+      background: var(--pbi-surface);
+    }
+
+    /* ========================================
+       UTILIDADES Y ESTADOS
+       ======================================== */
+    .hidden { display: none !important; }
+    
+    .loading {
+      position: relative;
+      pointer-events: none;
+    }
+    
+    .loading::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, #f3f2f1 25%, #e1dfdd 50%, #f3f2f1 75%);
+      background-size: 200% 100%;
+      animation: skeleton 1.5s infinite;
+      border-radius: var(--border-radius);
+    }
+
+    @keyframes skeleton {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 4px 8px;
+      background: #323130;
+      color: white;
+      font-size: 11px;
+      border-radius: var(--border-radius);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
+      z-index: 1000;
+    }
+
+    .tooltip:hover::after {
+      opacity: 1;
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 1200px) {
+      .charts-section {
+        grid-template-columns: 1fr;
+      }
+      .predictive-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main-header,
+      .filter-bar {
+        padding: var(--spacing-sm);
+        flex-wrap: wrap;
+      }
+      
+      .filter-group {
+        width: 100%;
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--pbi-border);
+        padding-bottom: var(--spacing-sm);
+        margin-bottom: var(--spacing-sm);
+      }
+      
+      .filter-btn-apply,
+      .filter-btn-reset {
+        width: 100%;
+        margin-left: 0;
+      }
+      
+      .kpi-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .dashboard-content {
+        padding: var(--spacing-md);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .kpi-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .kpi-value {
+        font-size: var(--font-size-xl);
+      }
+    }
+
+    /* ========================================
+       PRINT STYLES
+       ======================================== */
+    @media print {
+      .filter-bar,
+      .header-actions,
+      .chart-card__actions,
+      .table-actions {
+        display: none !important;
+      }
+      
+      .app-container {
+        grid-template-rows: auto 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- HEADER PRINCIPAL -->
+    <header class="main-header">
+      <div class="header-brand">
+        <div class="header-logo">PBI</div>
+        <div>
+          <h1 class="header-title">Analytics Pro</h1>
+          <p class="header-subtitle">Mantenimiento Preventivo & Predictivo</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="filter-btn" id="btnExport" title="Exportar reporte">
+          📥 Exportar
+        </button>
+        <button class="filter-btn" id="btnRefresh" title="Actualizar datos">
+          🔄 Actualizar
+        </button>
+      </div>
+    </header>
+
+    <!-- BARRA DE FILTROS DINÁMICOS -->
+    <div class="filter-bar">
+      <!-- Filtro de Fecha -->
+      <div class="filter-group">
+        <span class="filter-label">Período:</span>
+        <button class="filter-btn" data-range="7">7 días</button>
+        <button class="filter-btn" data-range="30" active>30 días</button>
+        <button class="filter-btn" data-range="90">90 días</button>
+        <button class="filter-btn" data-range="365">1 año</button>
+        <span style="margin: 0 8px; color: var(--pbi-border);">|</span>
+        <input type="date" id="dateStart" class="filter-control" title="Fecha inicio"/>
+        <input type="date" id="dateEnd" class="filter-control" title="Fecha fin"/>
+      </div>
+
+      <!-- Filtros Categorías -->
+      <div class="filter-group">
+        <span class="filter-label">Tipo Motor:</span>
+        <select id="filterMotor" class="filter-control">
+          <option value="">Todos</option>
+          <option value="Nafta">Nafta</option>
+          <option value="Diesel">Diesel</option>
+          <option value="Híbrido">Híbrido</option>
+          <option value="Eléctrico">Eléctrico</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Modelo:</span>
+        <select id="filterModelo" class="filter-control">
+          <option value="">Todos</option>
+          <option value="Sedan X">Sedan X</option>
+          <option value="SUV Y">SUV Y</option>
+          <option value="Truck Z">Truck Z</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Reparación:</span>
+        <select id="filterReparacion" class="filter-control">
+          <option value="">Todos</option>
+          <option value="Cambio Aceite">Cambio Aceite</option>
+          <option value="Frenos">Frenos</option>
+          <option value="Alineación">Alineación</option>
+          <option value="General">General</option>
+          <option value="Bujías">Bujías</option>
+          <option value="Transmisión">Transmisión</option>
+        </select>
+      </div>
+
+      <!-- Botones de Acción -->
+      <button class="filter-btn filter-btn-apply" id="btnApplyFilters">
+        ✓ Aplicar Filtros
+      </button>
+      <button class="filter-btn filter-btn-reset" id="btnResetFilters">
+        ↺ Limpiar
+      </button>
+    </div>
+
+    <!-- CONTENIDO DEL DASHBOARD -->
+    <main class="dashboard-content">
+      
+      <!-- FILA DE KPIs -->
+      <section class="kpi-row">
+        <article class="kpi-card" id="kpi-garantia-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Garantía Vehículo #1</span>
+            <span class="kpi-icon" id="kpi-garantia-icon">🛡️</span>
+          </div>
+          <p class="kpi-value" id="kpi-garantia">--</p>
+          <div class="kpi-trend" id="kpi-garantia-trend">
+            <span>--</span>
+          </div>
+          <p class="kpi-subtitle" id="kpi-garantia-subtitle">Estado de cobertura</p>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Frecuencia de Servicio</span>
+            <span class="kpi-icon">📅</span>
+          </div>
+          <p class="kpi-value" id="kpi-frecuencia">--</p>
+          <div class="kpi-trend kpi-trend--neutral" id="kpi-frecuencia-trend">
+            <span>Estable</span>
+          </div>
+          <p class="kpi-subtitle">Días promedio entre intervenciones</p>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Costo Promedio</span>
+            <span class="kpi-icon">💰</span>
+          </div>
+          <p class="kpi-value" id="kpi-costo">--</p>
+          <div class="kpi-trend kpi-trend--up" id="kpi-costo-trend">
+            <span>↑ 12% vs período anterior</span>
+          </div>
+          <p class="kpi-subtitle">Por orden de servicio (USD)</p>
+        </article>
+
+        <article class="kpi-card kpi-card--warning">
+          <div class="kpi-header">
+            <span class="kpi-title">Tiempo Promedio</span>
+            <span class="kpi-icon">⏱️</span>
+          </div>
+          <p class="kpi-value" id="kpi-tiempo">--</p>
+          <div class="kpi-trend kpi-trend--down" id="kpi-tiempo-trend">
+            <span>↓ 8% mejora</span>
+          </div>
+          <p class="kpi-subtitle">Horas estimadas por reparación</p>
+        </article>
+
+        <article class="kpi-card kpi-card--success">
+          <div class="kpi-header">
+            <span class="kpi-title">Vehículos Activos</span>
+            <span class="kpi-icon">🚗</span>
+          </div>
+          <p class="kpi-value" id="kpi-activos">--</p>
+          <div class="kpi-trend kpi-trend--up">
+            <span>↑ 3 nuevos este mes</span>
+          </div>
+          <p class="kpi-subtitle">En programa de mantenimiento</p>
+        </article>
+
+        <article class="kpi-card kpi-card--danger">
+          <div class="kpi-header">
+            <span class="kpi-title">Alertas Predictivas</span>
+            <span class="kpi-icon">⚠️</span>
+          </div>
+          <p class="kpi-value" id="kpi-alertas">--</p>
+          <div class="kpi-trend kpi-trend--down">
+            <span>Requieren atención</span>
+          </div>
+          <p class="kpi-subtitle">Intervenciones recomendadas</p>
+        </article>
+      </section>
+
+      <!-- PANEL PREDICTIVO -->
+      <section class="predictive-panel">
+        <div class="predictive-section">
+          <h3 class="predictive-title">🔮 Análisis Predictivo</h3>
+          <div class="alert-list" id="predictive-alerts">
+            <!-- Se llena dinámicamente -->
+          </div>
+        </div>
+        <div class="predictive-section">
+          <h3 class="predictive-title">📈 Recomendaciones IA</h3>
+          <div class="alert-list" id="ai-recommendations">
+            <!-- Se llena dinámicamente -->
+          </div>
+        </div>
+      </section>
+
+      <!-- GRÁFICOS PRINCIPALES -->
+      <section class="charts-section">
+        
+        <!-- Gráfico 1: Kilometraje por Motor -->
+        <article class="chart-card">
+          <div class="chart-card__header">
+            <h3 class="chart-card__title">Kilometraje Promedio por Tipo de Motor</h3>
+            <div class="chart-card__actions">
+              <button class="chart-btn tooltip" data-tip="Ver detalle" id="btn-motor-detail">🔍</button>
+              <button class="chart-btn tooltip" data-tip="Descargar PNG" id="btn-motor-export">📷</button>
+            </div>
+          </div>
+          <div class="chart-card__body">
+            <div class="chart-container">
+              <canvas id="motorChart"></canvas>
+            </div>
+          </div>
+        </article>
+
+        <!-- Gráfico 2: Evolución de Costos -->
+        <article class="chart-card">
+          <div class="chart-card__header">
+            <h3 class="chart-card__title">Tendencia de Costos de Reparación</h3>
+            <div class="chart-card__actions">
+              <button class="chart-btn tooltip" data-tip="Cambiar período" id="btn-cost-period">📊</button>
+              <button class="chart-btn tooltip" data-tip="Exportar datos" id="btn-cost-export">📥</button>
+            </div>
+          </div>
+          <div class="chart-card__body">
+            <div class="chart-container">
+              <canvas id="costoLineChart"></canvas>
+            </div>
+          </div>
+        </article>
+
+        <!-- Gráfico 3: Frecuencia por Modelo -->
+        <article class="chart-card">
+          <div class="chart-card__header">
+            <h3 class="chart-card__title">Frecuencia de Servicios por Modelo</h3>
+            <div class="chart-card__actions">
+              <button class="chart-btn tooltip" data-tip="Comparar modelos" id="btn-model-compare">⚖️</button>
+              <button class="chart-btn tooltip" data-tip="Ver histórico" id="btn-model-history">📜</button>
+            </div>
+          </div>
+          <div class="chart-card__body">
+            <div class="chart-container">
+              <canvas id="modeloChart"></canvas>
+            </div>
+          </div>
+        </article>
+
+        <!-- Gráfico 4: Distribución de Reparaciones -->
+        <article class="chart-card">
+          <div class="chart-card__header">
+            <h3 class="chart-card__title">Distribución de Tipos de Reparación</h3>
+            <div class="chart-card__actions">
+              <button class="chart-btn tooltip" data-tip="Filtrar por tipo" id="btn-repair-filter">🎯</button>
+              <button class="chart-btn tooltip" data-tip="Exportar resumen" id="btn-repair-export">📋</button>
+            </div>
+          </div>
+          <div class="chart-card__body">
+            <div class="chart-container">
+              <canvas id="reparacionChart"></canvas>
+            </div>
+          </div>
+        </article>
+
+      </section>
+
+      <!-- TABLA DE DATOS DETALLADA -->
+      <section class="data-table-container">
+        <div class="table-header">
+          <h3 class="table-title">📋 Registro de Mantenimientos</h3>
+          <div class="table-actions">
+            <button class="filter-btn" id="btn-table-export">📥 CSV</button>
+            <button class="filter-btn" id="btn-table-print">🖨️ Imprimir</button>
+          </div>
+        </div>
+        <div style="overflow-x: auto; max-height: 400px;">
+          <table class="table" id="dataTable">
+            <thead>
+              <tr>
+                <th data-sort="ID">ID</th>
+                <th data-sort="Modelo">Modelo</th>
+                <th data-sort="Motor">Motor</th>
+                <th data-sort="Km">Kilometraje</th>
+                <th data-sort="Fecha">Fecha</th>
+                <th data-sort="Reparacion">Reparación</th>
+                <th data-sort="Tiempo">Tiempo (h)</th>
+                <th data-sort="Costo">Costo (USD)</th>
+                <th data-sort="Garantia">Garantía</th>
+                <th data-sort="Estado">Estado</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <!-- Se llena dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="dashboard-footer">
+      <p>
+        Analytics Pro v2.1 • Última actualización: <span id="lastUpdate">--</span> • 
+        Datos de muestra para demostración • 
+        <a href="#" style="color: var(--pbi-primary); text-decoration: none;">Configuración</a> • 
+        <a href="#" style="color: var(--pbi-primary); text-decoration: none;">Ayuda</a>
+      </p>
+    </footer>
+
+  </div>
+
+  <script>
+    /**
+     * POWER BI STYLE DASHBOARD
+     * Mantenimiento Preventivo y Predictivo
+     * Arquitectura modular con filtros dinámicos
+     */
+
+    // ========================================
+    // 1. CONFIGURACIÓN GLOBAL
+    // ========================================
+    const CONFIG = {
+      colors: {
+        primary: '#0078d4',
+        success: '#107c10',
+        warning: '#ffb900',
+        danger: '#d83b01',
+        info: '#00bcf2',
+        nafta: '#3b82f6',
+        diesel: '#10b981',
+        hibrido: '#8b5cf6',
+        electrico: '#06b6d4'
+      },
+      datePresets: {
+        7: { label: '7 días', days: 7 },
+        30: { label: '30 días', days: 30 },
+        90: { label: '90 días', days: 90 },
+        365: { label: '1 año', days: 365 }
+      },
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { 
+            position: 'bottom', 
+            labels: { 
+              font: { family: 'Segoe UI', size: 11 },
+              padding: 15,
+              usePointStyle: true
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(50, 49, 48, 0.95)',
+            titleFont: { family: 'Segoe UI', size: 12, weight: '600' },
+            bodyFont: { family: 'Segoe UI', size: 11 },
+            padding: 12,
+            displayColors: true,
+            callbacks: {
+              label: function(context) {
+                return `${context.dataset.label}: ${context.parsed.y?.toLocaleString('es-AR') || context.parsed}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { 
+            ticks: { font: { family: 'Segoe UI', size: 10 }, color: '#605e5c' },
+            grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false }
+          },
+          y: { 
+            beginAtZero: true, 
+            ticks: { font: { family: 'Segoe UI', size: 10 }, color: '#605e5c' },
+            grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false }
+          }
+        }
+      }
+    };
+
+    // ========================================
+    // 2. DATOS DE EJEMPLO (CSV)
+    // ========================================
+    const RAW_DATA = `ID_Vehiculo,Kilometraje,Tipo_Motor,Fecha_Reparacion,Tipo_Reparacion,Tiempo_Horas,Garantia_Hasta,Costo_Reparacion,Modelo
+1,50000,Nafta,2025-01-15,Cambio Aceite,1.5,2026-01-15,150,Sedan X
+2,120000,Diesel,2024-11-20,Frenos Pastillas,3.0,2025-05-20,350,SUV Y
+3,75000,Nafta,2025-03-01,Alineacion,1.0,2026-03-01,100,Sedan X
+4,95000,Diesel,2024-10-05,Revision General,4.0,2025-04-05,200,Truck Z
+5,150000,Nafta,2025-02-10,Bujias,2.0,2025-08-10,180,SUV Y
+6,88000,Nafta,2025-03-15,Cambio Aceite,1.2,2026-03-15,160,Sedan X
+7,110000,Diesel,2025-04-01,Transmision,8.0,2026-04-01,1200,Truck Z
+8,65000,Nafta,2025-01-28,Frenos Discos,2.5,2026-01-28,280,Sedan X
+9,135000,Diesel,2025-02-14,Revision General,5.0,2025-08-14,450,Truck Z
+10,42000,Nafta,2025-03-20,Cambio Aceite,1.0,2026-03-20,140,SUV Y`;
+
+    // ========================================
+    // 3. UTILIDADES
+    // ========================================
+    const Utils = {
+      parseCSV: (csv) => {
+        const [headerLine, ...dataLines] = csv.trim().split('\n');
+        const headers = headerLine.split(',').map(h => h.trim());
+        return dataLines.map(line => {
+          const values = line.split(',');
+          return headers.reduce((obj, header, idx) => {
+            obj[header] = values[idx]?.trim() || '';
+            return obj;
+          }, {});
+        });
+      },
+
+      parseDate: (str) => new Date(str + 'T00:00:00'),
+      
+      formatDate: (date) => {
+        if (!date) return '--';
+        const d = new Date(date);
+        return d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      },
+      
+      formatCurrency: (amount) => 
+        new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(amount),
+      
+      formatNumber: (num, decimals = 0) => 
+        new Intl.NumberFormat('es-AR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(num),
+      
+      formatDateShort: (date) => {
+        const d = new Date(date);
+        return d.toLocaleDateString('es-AR', { month: 'short', day: 'numeric' });
+      },
+
+      getRandomTrend: () => {
+        const trends = [
+          { text: '↑ 12% vs período anterior', class: 'kpi-trend--up' },
+          { text: '↓ 8% mejora', class: 'kpi-trend--down' },
+          { text: 'Estable', class: 'kpi-trend--neutral' },
+          { text: '↑ 5% crecimiento', class: 'kpi-trend--up' }
+        ];
+        return trends[Math.floor(Math.random() * trends.length)];
+      },
+
+      debounce: (func, wait) => {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+    };
+
+    // ========================================
+    // 4. GESTOR DE DATOS
+    // ========================================
+    const DataManager = {
+      rawData: [],
+      filteredData: [],
+      dateRange: { start: null, end: null },
+      filters: { motor: '', modelo: '', reparacion: '' },
+
+      init(csvString) {
+        this.rawData = Utils.parseCSV(csvString).map(item => ({
+          ...item,
+          Fecha_Reparacion: Utils.parseDate(item.Fecha_Reparacion),
+          Garantia_Hasta: Utils.parseDate(item.Garantia_Hasta),
+          Kilometraje: parseFloat(item.Kilometraje),
+          Tiempo_Horas: parseFloat(item.Tiempo_Horas),
+          Costo_Reparacion: parseFloat(item.Costo_Reparacion)
+        }));
+        this.resetFilters();
+        return this.filteredData;
+      },
+
+      resetFilters() {
+        this.dateRange = { 
+          start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), 
+          end: new Date() 
+        };
+        this.filters = { motor: '', modelo: '', reparacion: '' };
+        this.applyFilters();
+      },
+
+      setDateRange(start, end) {
+        this.dateRange = { start, end };
+        this.applyFilters();
+      },
+
+      setFilter(key, value) {
+        this.filters[key] = value;
+        this.applyFilters();
+      },
+
+      applyFilters() {
+        this.filteredData = this.rawData.filter(item => {
+          // Filtro de fecha
+          if (this.dateRange.start && item.Fecha_Reparacion < this.dateRange.start) return false;
+          if (this.dateRange.end && item.Fecha_Reparacion > this.dateRange.end) return false;
+          
+          // Filtros de categoría
+          if (this.filters.motor && item.Tipo_Motor !== this.filters.motor) return false;
+          if (this.filters.modelo && item.Modelo !== this.filters.modelo) return false;
+          if (this.filters.reparacion && !item.Tipo_Reparacion.includes(this.filters.reparacion)) return false;
+          
+          return true;
+        });
+        return this.filteredData;
+      },
+
+      calculateKPIs() {
+        const data = this.filteredData;
+        if (data.length === 0) {
+          return {
+            warranty: { active: false, text: 'Sin datos', days: 0 },
+            frequency: '0 días',
+            cost: Utils.formatCurrency(0),
+            time: '0.0 h',
+            activos: 0,
+            alertas: 0
+          };
+        }
+
+        // KPI: Garantía Vehículo #1
+        const vehicle1 = this.rawData.find(v => v.ID_Vehiculo === "1");
+        const warrantyDate = vehicle1?.Garantia_Hasta;
+        const daysLeft = warrantyDate ? Math.ceil((warrantyDate - new Date()) / (1000 * 60 * 60 * 24)) : 0;
+        const warrantyActive = warrantyDate && warrantyDate >= new Date();
+
+        // KPI: Frecuencia promedio
+        const dates = data.map(v => v.Fecha_Reparacion.getTime()).sort((a, b) => a - b);
+        const totalDays = dates.length > 1 ? (dates[dates.length - 1] - dates[0]) / (1000 * 60 * 60 * 24) : 0;
+        const avgFrequency = totalDays / Math.max(data.length - 1, 1);
+
+        // KPI: Costo promedio
+        const totalCost = data.reduce((sum, v) => sum + v.Costo_Reparacion, 0);
+        const avgCost = totalCost / data.length;
+
+        // KPI: Tiempo promedio
+        const totalTime = data.reduce((sum, v) => sum + v.Tiempo_Horas, 0);
+        const avgTime = totalTime / data.length;
+
+        // KPI: Vehículos activos únicos
+        const activos = new Set(data.map(v => v.ID_Vehiculo)).size;
+
+        // KPI: Alertas predictivas (simulado)
+        const alertas = data.filter(v => v.Kilometraje > 100000 || v.Tiempo_Horas > 5).length;
+
+        return {
+          warranty: { active: warrantyActive, text: warrantyActive ? 'Activa' : 'Vencida', days: daysLeft },
+          frequency: `${Math.round(avgFrequency)} días`,
+          cost: Utils.formatCurrency(avgCost),
+          time: `${avgTime.toFixed(1)} h`,
+          activos,
+          alertas
+        };
+      },
+
+      getChartData() {
+        const data = this.filteredData;
+        
+        // Gráfico 1: Kilometraje por motor
+        const motorStats = {};
+        data.forEach(v => {
+          motorStats[v.Tipo_Motor] = motorStats[v.Tipo_Motor] || { sum: 0, count: 0 };
+          motorStats[v.Tipo_Motor].sum += v.Kilometraje;
+          motorStats[v.Tipo_Motor].count++;
+        });
+        const motorChart = {
+          labels: Object.keys(motorStats),
+          values: Object.entries(motorStats).map(([_, s]) => s.sum / s.count),
+          colors: Object.keys(motorStats).map(m => CONFIG.colors[m.toLowerCase()] || CONFIG.colors.primary)
+        };
+
+        // Gráfico 2: Evolución de costos (ordenado por fecha)
+        const sortedByDate = [...data].sort((a, b) => a.Fecha_Reparacion - b.Fecha_Reparacion);
+        const costChart = {
+          labels: sortedByDate.map(v => Utils.formatDateShort(v.Fecha_Reparacion)),
+          values: sortedByDate.map(v => v.Costo_Reparacion),
+          dates: sortedByDate.map(v => v.Fecha_Reparacion)
+        };
+
+        // Gráfico 3: Frecuencia por modelo (Radar)
+        const modelCount = {};
+        data.forEach(v => {
+          modelCount[v.Modelo] = (modelCount[v.Modelo] || 0) + 1;
+        });
+        const modelChart = {
+          labels: Object.keys(modelCount),
+          values: Object.values(modelCount)
+        };
+
+        // Gráfico 4: Distribución de reparaciones (Doughnut)
+        const repairCount = {};
+        data.forEach(v => {
+          const type = v.Tipo_Reparacion.split(' ')[0]; // Primera palabra como categoría
+          repairCount[type] = (repairCount[type] || 0) + 1;
+        });
+        const repairChart = {
+          labels: Object.keys(repairCount),
+          values: Object.values(repairCount),
+          colors: [CONFIG.colors.primary, CONFIG.colors.success, CONFIG.colors.warning, CONFIG.colors.danger, CONFIG.colors.info]
+        };
+
+        return { motorChart, costChart, modelChart, repairChart };
+      },
+
+      getPredictiveAlerts() {
+        const alerts = [];
+        const data = this.filteredData;
+        
+        // Reglas predictivas simuladas
+        data.forEach(v => {
+          if (v.Kilometraje > 120000) {
+            alerts.push({
+              level: 'high',
+              vehicle: `Vehículo #${v.ID_Vehiculo}`,
+              message: `Alto kilometraje (${Utils.formatNumber(v.Kilometraje)} km). Revisión mayor recomendada.`,
+              action: 'Programar revisión completa',
+              date: 'Próximos 15 días'
+            });
+          }
+          if (v.Tiempo_Horas > 4) {
+            alerts.push({
+              level: 'medium',
+              vehicle: `Vehículo #${v.ID_Vehiculo}`,
+              message: `Reparación extensa (${v.Tiempo_Horas}h). Verificar historial de fallas.`,
+              action: 'Análisis de causa raíz',
+              date: 'Esta semana'
+            });
+          }
+          if (v.Costo_Reparacion > 500) {
+            alerts.push({
+              level: 'high',
+              vehicle: `Vehículo #${v.ID_Vehiculo}`,
+              message: `Costo elevado (${Utils.formatCurrency(v.Costo_Reparacion)}). Evaluar reemplazo vs reparación.`,
+              action: 'Análisis costo-beneficio',
+              date: 'Inmediato'
+            });
+          }
+        });
+        
+        return alerts.slice(0, 4); // Máximo 4 alertas
+      },
+
+      getAIRecommendations() {
+        return [
+          {
+            title: 'Optimización de Stock',
+            message: 'Basado en patrones históricos, incrementar stock de pastillas de freno en 25% para el próximo trimestre.',
+            impact: 'Reducción esperada: 15% en tiempos de espera'
+          },
+          {
+            title: 'Mantenimiento Preventivo',
+            message: 'Vehículos Diesel con >100k km tienen 3x más probabilidad de fallas en transmisión. Programar inspección.',
+            impact: 'Prevención de costos mayores hasta $1,200'
+          },
+          {
+            title: 'Eficiencia Operativa',
+            message: 'Los servicios de "Cambio Aceite" se completan 40% más rápido los martes. Optimizar agenda.',
+            impact: 'Capacidad adicional: +8 servicios/semana'
+          }
+        ];
+      },
+
+      getTableData() {
+        return this.filteredData.map(item => ({
+          id: item.ID_Vehiculo,
+          modelo: item.Modelo,
+          motor: item.Tipo_Motor,
+          km: Utils.formatNumber(item.Kilometraje),
+          fecha: Utils.formatDate(item.Fecha_Reparacion),
+          reparacion: item.Tipo_Reparacion,
+          tiempo: `${item.Tiempo_Horas.toFixed(1)}h`,
+          costo: Utils.formatCurrency(item.Costo_Reparacion),
+          garantia: item.Garantia_Hasta >= new Date() ? 'Activa' : 'Vencida',
+          garantiaDate: Utils.formatDate(item.Garantia_Hasta),
+          estado: item.Kilometraje > 100000 ? 'Atención' : item.Costo_Reparacion > 500 ? 'Crítico' : 'Normal'
+        }));
+      }
+    };
+
+    // ========================================
+    // 5. RENDERIZADO DE UI
+    // ========================================
+    const UIManager = {
+      charts: {},
+
+      updateKPIs(kpis) {
+        // Garantía
+        const garantiaEl = document.getElementById('kpi-garantia');
+        const garantiaCard = document.getElementById('kpi-garantia-card');
+        const garantiaTrend = document.getElementById('kpi-garantia-trend');
+        const garantiaSubtitle = document.getElementById('kpi-garantia-subtitle');
+        
+        garantiaEl.textContent = kpis.warranty.text;
+        garantiaEl.className = `kpi-value ${kpis.warranty.active ? 'kpi-value--success' : 'kpi-value--danger'}`.trim();
+        garantiaCard.className = `kpi-card ${kpis.warranty.active ? '' : 'kpi-card--danger'}`.trim();
+        
+        if (kpis.warranty.active && kpis.warranty.days > 0) {
+          garantiaTrend.innerHTML = `<span class="kpi-trend--up">✓ ${kpis.warranty.days} días restantes</span>`;
+          garantiaSubtitle.textContent = 'Cobertura vigente';
+        } else if (!kpis.warranty.active) {
+          garantiaTrend.innerHTML = `<span class="kpi-trend--down">⚠ Requiere renovación</span>`;
+          garantiaSubtitle.textContent = 'Acción requerida';
+        } else {
+          garantiaTrend.innerHTML = '<span>--</span>';
+        }
+
+        // Otros KPIs
+        const updateKPI = (id, value, trendId) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = value;
+          if (trendId) {
+            const trend = Utils.getRandomTrend();
+            const trendEl = document.getElementById(trendId);
+            if (trendEl) {
+              trendEl.textContent = trend.text;
+              trendEl.className = `kpi-trend ${trend.class}`;
+            }
+          }
+        };
+
+        updateKPI('kpi-frecuencia', kpis.frequency, 'kpi-frecuencia-trend');
+        updateKPI('kpi-costo', kpis.cost, 'kpi-costo-trend');
+        updateKPI('kpi-tiempo', kpis.time, 'kpi-tiempo-trend');
+        document.getElementById('kpi-activos').textContent = kpis.activos;
+        document.getElementById('kpi-alertas').textContent = kpis.alertas;
+      },
+
+      updatePredictivePanel() {
+        const alerts = DataManager.getPredictiveAlerts();
+        const recommendations = DataManager.getAIRecommendations();
+        
+        const alertsContainer = document.getElementById('predictive-alerts');
+        alertsContainer.innerHTML = alerts.length > 0 
+          ? alerts.map(a => `
+              <div class="alert-item alert-item--${a.level}">
+                <span class="alert-icon">${a.level === 'high' ? '🔴' : a.level === 'medium' ? '🟡' : '🟢'}</span>
+                <div class="alert-content">
+                  <h4>${a.vehicle}</h4>
+                  <p>${a.message}</p>
+                  <div class="alert-meta">🎯 ${a.action} • 📅 ${a.date}</div>
+                </div>
+              </div>
+            `).join('')
+          : '<p style="color: var(--pbi-text-secondary); font-size: var(--font-size-sm);">✅ Sin alertas predictivas en el período seleccionado</p>';
+
+        const recsContainer = document.getElementById('ai-recommendations');
+        recsContainer.innerHTML = recommendations.map(r => `
+          <div class="alert-item alert-item--low">
+            <span class="alert-icon">💡</span>
+            <div class="alert-content">
+              <h4>${r.title}</h4>
+              <p>${r.message}</p>
+              <div class="alert-meta">📊 ${r.impact}</div>
+            </div>
+          </div>
+        `).join('');
+      },
+
+      renderCharts(chartData) {
+        // Destruir gráficos existentes
+        Object.values(this.charts).forEach(chart => chart?.destroy());
+
+        const baseOptions = { ...CONFIG.chartOptions };
+
+        // Gráfico 1: Barras - Kilometraje por motor
+        this.charts.motor = new Chart(document.getElementById('motorChart'), {
+          type: 'bar',
+          data: {
+            labels: chartData.motorChart.labels,
+            datasets: [{
+              label: 'Km Promedio',
+              data: chartData.motorChart.values,
+              backgroundColor: chartData.motorChart.colors,
+              borderRadius: 4,
+              borderSkipped: false,
+              barThickness: 40
+            }]
+          },
+          options: { 
+            ...baseOptions, 
+            plugins: { ...baseOptions.plugins, legend: { display: false } },
+            scales: { 
+              ...baseOptions.scales,
+              y: { ...baseOptions.scales.y, title: { display: true, text: 'Kilómetros', font: { size: 10 } } }
+            }
+          }
+        });
+
+        // Gráfico 2: Línea - Evolución de costos
+        this.charts.cost = new Chart(document.getElementById('costoLineChart'), {
+          type: 'line',
+          data: {
+            labels: chartData.costChart.labels,
+            datasets: [{
+              label: 'Costo (USD)',
+              data: chartData.costChart.values,
+              borderColor: CONFIG.colors.primary,
+              backgroundColor: 'rgba(0, 120, 212, 0.1)',
+              tension: 0.4,
+              fill: true,
+              pointRadius: 4,
+              pointHoverRadius: 6,
+              pointBackgroundColor: CONFIG.colors.primary,
+              pointBorderColor: '#fff',
+              pointBorderWidth: 2
+            }]
+          },
+          options: {
+            ...baseOptions,
+            scales: {
+              ...baseOptions.scales,
+              y: { ...baseOptions.scales.y, title: { display: true, text: 'USD', font: { size: 10 } } }
+            },
+            plugins: {
+              ...baseOptions.plugins,
+              annotation: {
+                annotations: {
+                  averageLine: {
+                    type: 'line',
+                    yMin: chartData.costChart.values.reduce((a,b) => a+b, 0) / chartData.costChart.values.length,
+                    yMax: chartData.costChart.values.reduce((a,b) => a+b, 0) / chartData.costChart.values.length,
+                    borderColor: CONFIG.colors.warning,
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    label: { display: true, content: 'Promedio', position: 'end' }
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        // Gráfico 3: Radar - Frecuencia por modelo
+        this.charts.modelo = new Chart(document.getElementById('modeloChart'), {
+          type: 'radar',
+          data: {
+            labels: chartData.modelChart.labels,
+            datasets: [{
+              label: 'Servicios',
+              data: chartData.modelChart.values,
+              backgroundColor: 'rgba(0, 120, 212, 0.2)',
+              borderColor: CONFIG.colors.primary,
+              pointBackgroundColor: CONFIG.colors.primary,
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: CONFIG.colors.primary,
+              pointRadius: 4
+            }]
+          },
+          options: {
+            ...baseOptions,
+            scales: {
+              r: {
+                angleLines: { color: 'rgba(0,0,0,0.05)' },
+                grid: { color: 'rgba(0,0,0,0.05)' },
+                pointLabels: { font: { family: 'Segoe UI', size: 11, weight: 500 }, color: '#323130' },
+                ticks: { display: false, stepSize: 1 },
+                beginAtZero: true
+              }
+            }
+          }
+        });
+
+        // Gráfico 4: Doughnut - Distribución de reparaciones
+        this.charts.reparacion = new Chart(document.getElementById('reparacionChart'), {
+          type: 'doughnut',
+          data: {
+            labels: chartData.repairChart.labels,
+            datasets: [{
+              label: 'Cantidad',
+              data: chartData.repairChart.values,
+              backgroundColor: chartData.repairChart.colors,
+              borderWidth: 2,
+              borderColor: '#fff',
+              hoverOffset: 10
+            }]
+          },
+          options: {
+            ...baseOptions,
+            cutout: '65%',
+            plugins: {
+              ...baseOptions.plugins,
+              legend: { position: 'right', labels: { boxWidth: 12, padding: 10 } }
+            }
+          }
+        });
+      },
+
+      renderTable(data) {
+        const tbody = document.getElementById('tableBody');
+        if (data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 20px; color: var(--pbi-text-secondary);">No hay datos para mostrar con los filtros aplicados</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = data.map(row => {
+          const estadoBadge = row.estado === 'Normal' ? 'badge--success' : row.estado === 'Atención' ? 'badge--warning' : 'badge--danger';
+          const garantiaBadge = row.garantia === 'Activa' ? 'badge--success' : 'badge--danger';
+          
+          return `
+            <tr>
+              <td><strong>#${row.id}</strong></td>
+              <td>${row.modelo}</td>
+              <td>${row.motor}</td>
+              <td style="text-align: right;">${row.km}</td>
+              <td>${row.fecha}</td>
+              <td>${row.reparacion}</td>
+              <td style="text-align: center;">${row.tiempo}</td>
+              <td style="text-align: right; font-weight: 500;">${row.costo}</td>
+              <td><span class="badge ${garantiaBadge}">${row.garantia}</span></td>
+              <td><span class="badge ${estadoBadge}">${row.estado}</span></td>
+            </tr>
+          `;
+        }).join('');
+      },
+
+      updateLastUpdate() {
+        document.getElementById('lastUpdate').textContent = new Date().toLocaleString('es-AR');
+      }
+    };
+
+    // ========================================
+    // 6. CONTROLADORES DE EVENTOS
+    // ========================================
+    const EventHandlers = {
+      init() {
+        // Filtros de período predefinido
+        document.querySelectorAll('.filter-btn[data-range]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.filter-btn[data-range]').forEach(b => b.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+            
+            const days = parseInt(e.currentTarget.dataset.range);
+            const end = new Date();
+            const start = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+            
+            document.getElementById('dateStart').valueAsDate = start;
+            document.getElementById('dateEnd').valueAsDate = end;
+            
+            DataManager.setDateRange(start, end);
+            this.refreshDashboard();
+          });
+        });
+
+        // Filtros de fecha personalizada
+        ['dateStart', 'dateEnd'].forEach(id => {
+          document.getElementById(id).addEventListener('change', Utils.debounce(() => {
+            const start = document.getElementById('dateStart').valueAsDate;
+            const end = document.getElementById('dateEnd').valueAsDate;
+            if (start && end && start <= end) {
+              document.querySelectorAll('.filter-btn[data-range]').forEach(b => b.classList.remove('active'));
+              DataManager.setDateRange(start, end);
+              this.refreshDashboard();
+            }
+          }, 300));
+        });
+
+        // Filtros de categoría
+        ['filterMotor', 'filterModelo', 'filterReparacion'].forEach(id => {
+          document.getElementById(id).addEventListener('change', (e) => {
+            const key = id.replace('filter', '').toLowerCase();
+            DataManager.setFilter(key, e.target.value);
+            this.refreshDashboard();
+          });
+        });
+
+        // Botones de acción
+        document.getElementById('btnApplyFilters').addEventListener('click', () => this.refreshDashboard());
+        document.getElementById('btnResetFilters').addEventListener('click', () => {
+          DataManager.resetFilters();
+          document.querySelectorAll('.filter-btn[data-range]').forEach((b, i) => {
+            b.classList.toggle('active', i === 1); // 30 días por defecto
+          });
+          document.getElementById('filterMotor').value = '';
+          document.getElementById('filterModelo').value = '';
+          document.getElementById('filterReparacion').value = '';
+          this.refreshDashboard();
+        });
+
+        document.getElementById('btnRefresh').addEventListener('click', () => {
+          this.refreshDashboard(true);
+        });
+
+        document.getElementById('btnExport').addEventListener('click', () => {
+          alert('📥 Funcionalidad de exportación:\n\n• PDF: Reporte completo del dashboard\n• Excel: Datos filtrados en tabla\n• PNG: Imágenes de cada gráfico\n\n[En producción, esto generaría los archivos reales]');
+        });
+
+        // Sorting de tabla
+        document.querySelectorAll('.table th[data-sort]').forEach(th => {
+          th.addEventListener('click', () => {
+            const field = th.dataset.sort;
+            const isAsc = !th.classList.contains('sorted-asc');
+            
+            document.querySelectorAll('.table th').forEach(h => h.classList.remove('sorted-asc', 'sorted-desc'));
+            th.classList.add(isAsc ? 'sorted-asc' : 'sorted-desc');
+            
+            const sorted = [...DataManager.filteredData].sort((a, b) => {
+              let valA = a[field] || a[`Tipo_${field}`] || a[`${field}_Reparacion`];
+              let valB = b[field] || b[`Tipo_${field}`] || b[`${field}_Reparacion`];
+              
+              if (typeof valA === 'string') valA = valA.toLowerCase();
+              if (typeof valB === 'string') valB = valB.toLowerCase();
+              
+              if (valA < valB) return isAsc ? -1 : 1;
+              if (valA > valB) return isAsc ? 1 : -1;
+              return 0;
+            });
+            
+            DataManager.filteredData = sorted;
+            UIManager.renderTable(DataManager.getTableData());
+          });
+        });
+
+        // Exportar tabla
+        document.getElementById('btn-table-export').addEventListener('click', () => {
+          const data = DataManager.getTableData();
+          const csv = [
+            ['ID', 'Modelo', 'Motor', 'Kilometraje', 'Fecha', 'Reparación', 'Tiempo', 'Costo', 'Garantía', 'Estado'].join(','),
+            ...data.map(r => [r.id, r.modelo, r.motor, r.km, r.fecha, r.reparacion, r.tiempo, r.costo, r.garantia, r.estado].join(','))
+          ].join('\n');
+          
+          const blob = new Blob([csv], { type: 'text/csv' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `mantenimiento_export_${new Date().toISOString().slice(0,10)}.csv`;
+          a.click();
+          URL.revokeObjectURL(url);
+        });
+      },
+
+      refreshDashboard(force = false) {
+        // Calcular y actualizar KPIs
+        const kpis = DataManager.calculateKPIs();
+        UIManager.updateKPIs(kpis);
+        
+        // Actualizar panel predictivo
+        UIManager.updatePredictivePanel();
+        
+        // Renderizar gráficos
+        const chartData = DataManager.getChartData();
+        UIManager.renderCharts(chartData);
+        
+        // Renderizar tabla
+        UIManager.renderTable(DataManager.getTableData());
+        
+        // Actualizar timestamp
+        if (force) UIManager.updateLastUpdate();
+      }
+    };
+
+    // ========================================
+    // 7. INICIALIZACIÓN
+    // ========================================
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        // Inicializar datos
+        DataManager.init(RAW_DATA);
+        
+        // Configurar fechas por defecto en inputs
+        const defaultEnd = new Date();
+        const defaultStart = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+        document.getElementById('dateStart').valueAsDate = defaultStart;
+        document.getElementById('dateEnd').valueAsDate = defaultEnd;
+        
+        // Inicializar event handlers
+        EventHandlers.init();
+        
+        // Primer render
+        EventHandlers.refreshDashboard();
+        UIManager.updateLastUpdate();
+        
+        // Auto-refresh cada 5 minutos (simulado)
+        setInterval(() => UIManager.updateLastUpdate(), 60000);
+        
+      } catch (error) {
+        console.error('Error al inicializar dashboard:', error);
+        document.querySelectorAll('.kpi-value').forEach(el => {
+          el.textContent = 'Error';
+          el.classList.add('kpi-value--danger');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
