@@ -52,7 +52,6 @@
             -webkit-font-smoothing:antialiased;
         }
 
-        /* ===== SCROLL PROGRESS ===== */
         .scroll-progress{
             position:fixed;top:0;left:0;height:3px;
             background:linear-gradient(90deg,var(--lavender),var(--pink),var(--mint),var(--peach));
@@ -60,7 +59,6 @@
             transition:width 0.1s linear;
         }
 
-        /* ===== HEADER ===== */
         header{
             position:fixed;top:0;width:100%;
             background:rgba(253,248,244,0.85);
@@ -148,7 +146,6 @@
 
         @keyframes ripple-anim{to{transform:scale(4);opacity:0}}
 
-        /* ===== HERO ===== */
         .hero{
             margin-top:70px;min-height:100vh;
             display:flex;align-items:center;
@@ -318,7 +315,6 @@
             display:flex;align-items:center;gap:0.4rem;
         }
 
-        /* ===== SECTION COMMON ===== */
         .section-label{
             display:inline-flex;align-items:center;gap:0.5rem;
             color:var(--lavender-deep);font-size:0.75rem;font-weight:700;
@@ -346,7 +342,6 @@
         .section-header-center .section-label{justify-content:center}
         .section-header-center .section-subtitle{margin:0 auto 3rem}
 
-        /* ===== CAROUSEL ===== */
         .carousel-section{padding:6rem 2rem;max-width:1400px;margin:0 auto}
         .carousel-container{position:relative;margin:0 auto}
 
@@ -452,7 +447,6 @@
 
         .carousel-counter span{color:white;font-weight:700}
 
-        /* ===== GALLERY STRIP ===== */
         .gallery-strip{padding:5rem 2rem;max-width:1400px;margin:0 auto}
 
         .gallery-grid{
@@ -485,7 +479,6 @@
 
         .gallery-grid .g-item:hover::after{opacity:1}
 
-        /* ===== FEATURES ===== */
         .features{
             padding:6rem 2rem;background:var(--bg-alt);
             border-top:1px solid var(--border-light);
@@ -535,22 +528,21 @@
 
         .feature-card p{color:var(--text-mid);font-size:0.88rem;line-height:1.75}
 
-        /* ===== REVIEWS ===== */
+        /* ===== ANIMATED TESTIMONIALS ===== */
         .reviews{
             padding:6rem 2rem;background:var(--bg);
             border-bottom:1px solid var(--border-light);
+            overflow:hidden;
         }
 
         .reviews-content{max-width:1300px;margin:0 auto}
 
         .reviews-summary{
             display:flex;align-items:center;justify-content:center;
-            gap:2rem;margin-bottom:3rem;flex-wrap:wrap;
+            gap:2.5rem;margin-bottom:3.5rem;flex-wrap:wrap;
         }
 
-        .reviews-big-score{
-            text-align:center;
-        }
+        .reviews-big-score{text-align:center}
 
         .reviews-big-score .number{
             font-family:'Playfair Display',serif;
@@ -589,52 +581,176 @@
             width:0%;
         }
 
-        .reviews-grid{
-            display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+        /* Animated Testimonials Component */
+        .at-container{
+            position:relative;
+            max-width:900px;
+            margin:0 auto;
+            min-height:420px;
         }
 
-        .review-card{
+        .at-card{
+            position:absolute;
+            inset:0;
+            display:flex;
+            gap:3rem;
+            align-items:center;
             background:var(--card);
             border:1.5px solid var(--border-light);
-            border-radius:var(--radius);padding:2rem;
-            transition:all 0.4s ease;position:relative;
+            border-radius:var(--radius);
+            padding:3rem;
+            box-shadow:var(--shadow-soft);
+            opacity:0;
+            transform:translateY(30px) scale(0.97);
+            transition:all 0.7s cubic-bezier(0.4,0,0.2,1);
+            pointer-events:none;
         }
 
-        .review-card:hover{
-            transform:translateY(-6px);
+        .at-card.active{
+            opacity:1;
+            transform:translateY(0) scale(1);
+            pointer-events:all;
             box-shadow:var(--shadow-md);
-            border-color:var(--lavender-soft);
         }
 
-        .review-card .quote-icon{
-            position:absolute;top:1.2rem;right:1.5rem;
-            font-size:2.5rem;color:var(--lavender-soft);
-            font-family:'Playfair Display',serif;
-            line-height:1;pointer-events:none;
+        .at-card.exit-up{
+            opacity:0;
+            transform:translateY(-30px) scale(0.97);
         }
 
-        .review-header{
-            display:flex;align-items:center;gap:0.8rem;margin-bottom:1rem;
-        }
-
-        .review-avatar{
-            width:44px;height:44px;border-radius:50%;
-            display:flex;align-items:center;justify-content:center;
-            font-weight:700;font-size:1rem;color:white;
+        .at-photo-wrap{
             flex-shrink:0;
+            position:relative;
         }
 
-        .review-avatar.a1{background:linear-gradient(135deg,var(--lavender),var(--lavender-deep))}
-        .review-avatar.a2{background:linear-gradient(135deg,var(--pink),var(--pink-deep))}
-        .review-avatar.a3{background:linear-gradient(135deg,var(--mint),var(--mint-deep))}
-        .review-avatar.a4{background:linear-gradient(135deg,var(--peach),var(--peach-deep))}
-        .review-avatar.a5{background:linear-gradient(135deg,var(--sky),#7BB5D4)}
-        .review-avatar.a6{background:linear-gradient(135deg,#D4B1D4,var(--lavender-deep))}
+        .at-photo{
+            width:180px;height:180px;
+            border-radius:var(--radius);
+            object-fit:cover;
+            display:block;
+            border:3px solid var(--border-light);
+            box-shadow:var(--shadow-soft);
+            transition:transform 0.5s ease;
+        }
 
-        .review-name{font-weight:600;font-size:0.92rem;color:var(--text)}
-        .review-date{font-size:0.78rem;color:var(--text-light)}
-        .review-stars{color:var(--peach-deep);font-size:0.82rem;margin-bottom:0.8rem;letter-spacing:1px}
-        .review-text{color:var(--text-mid);font-size:0.9rem;line-height:1.75}
+        .at-card.active .at-photo{transform:scale(1)}
+
+        .at-photo-glow{
+            position:absolute;
+            inset:-8px;
+            border-radius:calc(var(--radius) + 4px);
+            background:linear-gradient(135deg,var(--lavender-soft),var(--pink-soft),var(--mint-soft));
+            z-index:-1;
+            opacity:0;
+            transition:opacity 0.5s ease;
+        }
+
+        .at-card.active .at-photo-glow{opacity:1}
+
+        .at-stars{
+            color:var(--peach-deep);
+            font-size:0.95rem;
+            margin-bottom:1rem;
+            letter-spacing:2px;
+            opacity:0;
+            transform:translateX(-10px);
+            transition:all 0.5s ease 0.2s;
+        }
+
+        .at-card.active .at-stars{
+            opacity:1;
+            transform:translateX(0);
+        }
+
+        .at-quote{
+            font-size:1.08rem;
+            line-height:1.85;
+            color:var(--text-mid);
+            margin-bottom:1.5rem;
+            font-style:italic;
+            position:relative;
+            opacity:0;
+            transform:translateX(-10px);
+            transition:all 0.5s ease 0.25s;
+        }
+
+        .at-card.active .at-quote{
+            opacity:1;
+            transform:translateX(0);
+        }
+
+        .at-quote::before{
+            content:'\201C';
+            font-family:'Playfair Display',serif;
+            font-size:4rem;
+            color:var(--lavender-soft);
+            position:absolute;
+            top:-1.5rem;left:-1.5rem;
+            line-height:1;
+            pointer-events:none;
+        }
+
+        .at-author{
+            opacity:0;
+            transform:translateX(-10px);
+            transition:all 0.5s ease 0.3s;
+        }
+
+        .at-card.active .at-author{
+            opacity:1;
+            transform:translateX(0);
+        }
+
+        .at-name{
+            font-family:'Playfair Display',serif;
+            font-size:1.15rem;
+            font-weight:700;
+            color:var(--text);
+        }
+
+        .at-designation{
+            font-size:0.85rem;
+            color:var(--text-light);
+            margin-top:0.15rem;
+        }
+
+        .at-nav{
+            display:flex;
+            justify-content:center;
+            gap:0.6rem;
+            margin-top:2rem;
+        }
+
+        .at-dot{
+            width:10px;height:10px;
+            border-radius:50%;
+            background:var(--border);
+            border:none;
+            cursor:pointer;
+            transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
+            padding:0;
+        }
+
+        .at-dot.active{
+            background:var(--lavender);
+            width:32px;
+            border-radius:5px;
+            box-shadow:0 3px 12px rgba(155,130,174,0.3);
+        }
+
+        .at-dot:hover{background:var(--lavender-soft)}
+
+        /* Mobile stack for testimonials */
+        @media(max-width:768px){
+            .at-card{
+                flex-direction:column;
+                text-align:center;
+                padding:2rem 1.5rem;
+                gap:1.5rem;
+            }
+            .at-photo{width:120px;height:120px}
+            .at-quote::before{display:none}
+        }
 
         /* ===== FORM SECTION ===== */
         .form-section{
@@ -814,7 +930,6 @@
 
         .form-success p{color:var(--text-mid);line-height:1.7}
 
-        /* ===== CTA FINAL ===== */
         .cta-final{
             padding:6rem 2rem;position:relative;overflow:hidden;text-align:center;
         }
@@ -859,7 +974,6 @@
 
         .cta-final .phone-text{margin-top:1.5rem;color:var(--text-light);font-size:0.88rem}
 
-        /* ===== FLOATING LOCATION BTN ===== */
         .floating-location{
             position:fixed;bottom:2rem;left:2rem;z-index:999;
             display:flex;flex-direction:column;align-items:center;gap:0.4rem;
@@ -878,35 +992,29 @@
             border-radius:16px;text-decoration:none;
             color:var(--pink-deep);font-size:1.3rem;
             box-shadow:var(--shadow-md);
-            transition:all 0.3s ease;
-            position:relative;
+            transition:all 0.3s ease;position:relative;
         }
 
         .floating-location a:hover{
             transform:translateY(-4px) scale(1.05);
             box-shadow:var(--shadow-lg);
-            border-color:var(--pink);
-            background:var(--pink-soft);
+            border-color:var(--pink);background:var(--pink-soft);
         }
 
         .floating-location .loc-label{
             font-size:0.68rem;font-weight:600;
-            color:var(--text-light);
-            background:white;padding:0.2rem 0.6rem;
-            border-radius:6px;box-shadow:var(--shadow-soft);
-            border:1px solid var(--border-light);
-            white-space:nowrap;
-            opacity:0;transform:translateY(4px);
-            transition:all 0.3s ease;
-            pointer-events:none;
+            color:var(--text-light);background:white;
+            padding:0.2rem 0.6rem;border-radius:6px;
+            box-shadow:var(--shadow-soft);border:1px solid var(--border-light);
+            white-space:nowrap;opacity:0;transform:translateY(4px);
+            transition:all 0.3s ease;pointer-events:none;
         }
 
         .floating-location:hover .loc-label{opacity:1;transform:translateY(0)}
 
         .floating-location a .pulse-ring{
             position:absolute;inset:-4px;
-            border:2px solid var(--pink);
-            border-radius:20px;
+            border:2px solid var(--pink);border-radius:20px;
             animation:loc-pulse 2.5s ease-out infinite;
             pointer-events:none;
         }
@@ -916,7 +1024,6 @@
             100%{transform:scale(1.3);opacity:0}
         }
 
-        /* ===== FOOTER ===== */
         footer{
             background:var(--bg-alt);
             border-top:1px solid var(--border-light);
@@ -938,13 +1045,11 @@
         }
 
         .designer-signature a:hover{
-            color:var(--pink-deep);
-            transform:translateY(-2px);
+            color:var(--pink-deep);transform:translateY(-2px);
         }
 
         .designer-signature a i{
-            font-size:1rem;
-            transition:transform 0.3s ease;
+            font-size:1rem;transition:transform 0.3s ease;
         }
 
         .designer-signature a:hover i{transform:rotate(15deg) scale(1.1)}
@@ -954,7 +1059,6 @@
             font-weight:400;margin-right:0.3rem;
         }
 
-        /* ===== TOAST ===== */
         .toast{
             position:fixed;bottom:2rem;right:2rem;
             background:white;border:1.5px solid var(--pink);
@@ -970,7 +1074,6 @@
         .toast.show{transform:translateY(0)}
         .toast i{color:var(--pink-deep);font-size:1.1rem}
 
-        /* ===== SCROLL REVEAL ===== */
         .sr{
             opacity:0;transform:translateY(35px);
             transition:all 0.8s cubic-bezier(0.4,0,0.2,1);
@@ -983,7 +1086,6 @@
         .sr-d4{transition-delay:0.4s}
         .sr-d5{transition-delay:0.5s}
 
-        /* ===== CURSOR GLOW ===== */
         .cursor-glow{
             position:fixed;width:300px;height:300px;
             border-radius:50%;
@@ -992,14 +1094,12 @@
             transform:translate(-50%,-50%);
         }
 
-        /* ===== RESPONSIVE ===== */
         @media(max-width:1024px){
             .hero-content{grid-template-columns:1fr;gap:2.5rem;text-align:center}
             .hero h1{font-size:2.8rem}
             .hero-image-wrap{max-width:480px;margin:0 auto}
             .cta-buttons{justify-content:center}
             .features-grid{grid-template-columns:repeat(2,1fr)}
-            .reviews-grid{grid-template-columns:repeat(2,1fr)}
             .form-content{grid-template-columns:1fr;gap:2.5rem}
             .form-info{position:static}
             .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:200px 200px 200px}
@@ -1017,7 +1117,6 @@
             .carousel-item-info h3{font-size:1.3rem}
             .carousel-item-info{padding:1.5rem}
             .features-grid{grid-template-columns:1fr}
-            .reviews-grid{grid-template-columns:1fr}
             .form-row{grid-template-columns:1fr}
             .form-card{padding:1.8rem}
             .gallery-grid{grid-template-columns:1fr;grid-template-rows:auto}
@@ -1028,6 +1127,7 @@
             .hero-float-badge-2{display:none}
             .floating-location{bottom:1.2rem;left:1.2rem}
             .floating-location a{width:48px;height:48px;font-size:1.1rem;border-radius:14px}
+            .at-container{min-height:520px}
         }
 
         @media(max-width:480px){
@@ -1041,13 +1141,9 @@
 </head>
 <body>
 
-<!-- Scroll Progress -->
 <div class="scroll-progress" id="scrollProgress"></div>
-
-<!-- Cursor Glow -->
 <div class="cursor-glow" id="cursorGlow"></div>
 
-<!-- Floating Location Button -->
 <div class="floating-location">
     <a href="https://www.google.com/maps/search/cordoba+centro+argentina" target="_blank" rel="noopener" title="Ver ubicación en mapa">
         <span class="pulse-ring"></span>
@@ -1056,7 +1152,6 @@
     <span class="loc-label">Ver ubicación</span>
 </div>
 
-<!-- Header -->
 <header id="mainHeader">
     <div class="header-content">
         <div class="logo">
@@ -1075,10 +1170,9 @@
     </div>
 </header>
 
-<!-- Hero -->
 <section class="hero">
     <div class="hero-bg">
-        <img src="FRENTECASA.png" alt="Frente de la casa en Córdoba">
+        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1400&h=900&fit=crop" alt="Frente de la casa en Córdoba">
     </div>
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
@@ -1102,7 +1196,7 @@
         </div>
         <div class="hero-image-wrap">
             <div class="hero-image-card">
-                <img src="Captura de pantalla 2026-06-29 080755.png" alt="Interior de la casa">
+                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=450&fit=crop" alt="Interior de la casa">
             </div>
             <div class="hero-float-badge">
                 <div class="badge-icon">⭐</div>
@@ -1118,7 +1212,6 @@
     </div>
 </section>
 
-<!-- Carousel -->
 <section class="carousel-section" id="carousel">
     <div class="sr">
         <div class="section-label">Espacios</div>
@@ -1129,7 +1222,7 @@
         <div class="carousel-wrapper">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="Captura de pantalla 2026-06-29 080807.png" alt="Espacio de la casa">
+                    <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=600&fit=crop" alt="Espacio de la casa">
                     <div class="carousel-overlay"></div>
                     <div class="carousel-item-info">
                         <div class="carousel-tag">Interior</div>
@@ -1138,7 +1231,7 @@
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="Captura de pantalla 2026-06-29 080817.png" alt="Espacio de la casa">
+                    <img src="https://images.unsplash.com/photo-1540932239986-310128078ceb?w=1200&h=600&fit=crop" alt="Espacio de la casa">
                     <div class="carousel-overlay"></div>
                     <div class="carousel-item-info">
                         <div class="carousel-tag">Cocina</div>
@@ -1147,7 +1240,7 @@
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="Captura de pantalla 2026-06-29 080829.png" alt="Espacio de la casa">
+                    <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=600&fit=crop" alt="Espacio de la casa">
                     <div class="carousel-overlay"></div>
                     <div class="carousel-item-info">
                         <div class="carousel-tag">Dormitorio</div>
@@ -1156,7 +1249,7 @@
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="Captura de pantalla 2026-06-29 080843.png" alt="Espacio de la casa">
+                    <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&h=600&fit=crop" alt="Espacio de la casa">
                     <div class="carousel-overlay"></div>
                     <div class="carousel-item-info">
                         <div class="carousel-tag">Dormitorio</div>
@@ -1165,7 +1258,7 @@
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="Captura de pantalla 2026-06-29 080853.png" alt="Espacio de la casa">
+                    <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=1200&h=600&fit=crop" alt="Espacio de la casa">
                     <div class="carousel-overlay"></div>
                     <div class="carousel-item-info">
                         <div class="carousel-tag">Baño</div>
@@ -1174,7 +1267,7 @@
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="Captura de pantalla 2026-06-29 080924.png" alt="Espacio de la casa">
+                    <img src="https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=1200&h=600&fit=crop" alt="Espacio de la casa">
                     <div class="carousel-overlay"></div>
                     <div class="carousel-item-info">
                         <div class="carousel-tag">Exterior</div>
@@ -1183,7 +1276,7 @@
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="Captura de pantalla 2026-06-29 080933.png" alt="Espacio de la casa">
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&h=600&fit=crop" alt="Espacio de la casa">
                     <div class="carousel-overlay"></div>
                     <div class="carousel-item-info">
                         <div class="carousel-tag">Detalles</div>
@@ -1216,7 +1309,6 @@
     </div>
 </section>
 
-<!-- Gallery Strip -->
 <section class="gallery-strip">
     <div class="sr">
         <div class="section-label">Vistazo rápido</div>
@@ -1225,24 +1317,23 @@
     </div>
     <div class="gallery-grid">
         <div class="g-item sr sr-d1">
-            <img src="Captura de pantalla 2026-06-29 080755.png" alt="Interior de la casa">
+            <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop" alt="Interior de la casa">
         </div>
         <div class="g-item sr sr-d2">
-            <img src="Captura de pantalla 2026-06-29 080817.png" alt="Cocina de la casa">
+            <img src="https://images.unsplash.com/photo-1540932239986-310128078ceb?w=500&h=350&fit=crop" alt="Dormitorio de la casa">
         </div>
         <div class="g-item sr sr-d3">
-            <img src="Captura de pantalla 2026-06-29 080853.png" alt="Baño de la casa">
+            <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=500&h=350&fit=crop" alt="Baño de la casa">
         </div>
         <div class="g-item sr sr-d4">
-            <img src="Captura de pantalla 2026-06-29 080829.png" alt="Dormitorio de la casa">
+            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500&h=350&fit=crop" alt="Living de la casa">
         </div>
         <div class="g-item sr sr-d5">
-            <img src="Captura de pantalla 2026-06-29 080924.png" alt="Exterior de la casa">
+            <img src="https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=500&h=350&fit=crop" alt="Exterior de la casa">
         </div>
     </div>
 </section>
 
-<!-- Features -->
 <section class="features" id="features">
     <div class="features-content">
         <div class="section-header-center sr">
@@ -1285,7 +1376,7 @@
     </div>
 </section>
 
-<!-- Reviews / Opiniones -->
+<!-- Animated Testimonials -->
 <section class="reviews" id="opiniones">
     <div class="reviews-content">
         <div class="section-header-center sr">
@@ -1315,106 +1406,18 @@
             </div>
         </div>
 
-        <div class="reviews-grid">
-            <div class="review-card sr sr-d1">
-                <div class="quote-icon">"</div>
-                <div class="review-header">
-                    <div class="review-avatar a1">ML</div>
-                    <div>
-                        <div class="review-name">María López</div>
-                        <div class="review-date">Mayo 2025</div>
-                    </div>
-                </div>
-                <div class="review-stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-                <p class="review-text">Increíble experiencia. La casa superó nuestras expectativas, todo impecable y la ubicación es perfecta para recorrer Córdoba. Sin dudas volvemos.</p>
-            </div>
-
-            <div class="review-card sr sr-d2">
-                <div class="quote-icon">"</div>
-                <div class="review-header">
-                    <div class="review-avatar a2">GR</div>
-                    <div>
-                        <div class="review-name">Gonzalo Ramírez</div>
-                        <div class="review-date">Abril 2025</div>
-                    </div>
-                </div>
-                <div class="review-stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-                <p class="review-text">Fuimos con mi familia y fue excelente. La parrilla, las camas cómodas, todo muy bien cuidado. La atención del dueño fue de 10.</p>
-            </div>
-
-            <div class="review-card sr sr-d3">
-                <div class="quote-icon">"</div>
-                <div class="review-header">
-                    <div class="review-avatar a3">LF</div>
-                    <div>
-                        <div class="review-name">Lucía Fernández</div>
-                        <div class="review-date">Abril 2025</div>
-                    </div>
-                </div>
-                <div class="review-stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-stroke"></i>
-                </div>
-                <p class="review-text">Muy linda casa, tal cual se ve en las fotos. El barrio es tranquilo y hay supermercados cerca. Lo único que mejoraría es el WiFi, pero nada grave.</p>
-            </div>
-
-            <div class="review-card sr sr-d1">
-                <div class="quote-icon">"</div>
-                <div class="review-header">
-                    <div class="review-avatar a4">DM</div>
-                    <div>
-                        <div class="review-name">Diego Martínez</div>
-                        <div class="review-date">Marzo 2025</div>
-                    </div>
-                </div>
-                <div class="review-stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-                <p class="review-text">Perfecto para un fin de semana con amigos. Espacioso, bien equipado y el precio es muy justo comparado con otras opciones. 100% recomendable.</p>
-            </div>
-
-            <div class="review-card sr sr-d2">
-                <div class="quote-icon">"</div>
-                <div class="review-header">
-                    <div class="review-avatar a5">AP</div>
-                    <div>
-                        <div class="review-name">Ana Pereyra</div>
-                        <div class="review-date">Marzo 2025</div>
-                    </div>
-                </div>
-                <div class="review-stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-                <p class="review-text">Viajé sola con mis dos perros y me sentí súper cómoda. El patio es genial para ellos. La dueña fue muy amable y flexible con los horarios.</p>
-            </div>
-
-            <div class="review-card sr sr-d3">
-                <div class="quote-icon">"</div>
-                <div class="review-header">
-                    <div class="review-avatar a6">CR</div>
-                    <div>
-                        <div class="review-name">Carlos Ruiz</div>
-                        <div class="review-date">Febrero 2025</div>
-                    </div>
-                </div>
-                <div class="review-stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-                <p class="review-text">Tercera vez que alquilamos. Ya es nuestro lugar de referencia en Córdoba. Siempre todo perfecto, limpio y con todo funcionando. Un diez.</p>
-            </div>
+        <div class="at-container sr sr-d2" id="atContainer">
+            <!-- Cards se generan por JS -->
         </div>
+        <div class="at-nav" id="atNav"></div>
     </div>
 </section>
 
-<!-- Form Section -->
 <section class="form-section" id="formulario">
     <div class="form-content">
         <div class="form-info sr">
             <div class="form-info-image">
-                <img src="Captura de pantalla 2026-06-29 080843.png" alt="Habitación de la casa">
+                <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=600&h=400&fit=crop" alt="Habitación de la casa">
             </div>
             <div class="section-label">Reservá ahora</div>
             <h2>Solicitá tu fecha y te confirmamos en minutos</h2>
@@ -1522,7 +1525,7 @@
                         </div>
                         <div class="form-group">
                             <label for="telefono">Teléfono</label>
-                            <input type="tel" id="telefono" name="telefono" placeholder="Ej: 351 619-7404" required>
+                            <input type="tel" id="telefono" name="telefono" placeholder="Ej: 3489 686-939" required>
                         </div>
                     </div>
                     <button type="submit" class="form-submit" id="submitBtn">
@@ -1541,22 +1544,20 @@
     </div>
 </section>
 
-<!-- CTA Final -->
 <section class="cta-final">
     <div class="cta-final-bg">
-        <img src="Captura de pantalla 2026-06-29 080933.png" alt="Detalles de la casa">
+        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&h=600&fit=crop" alt="Detalles de la casa">
     </div>
     <div class="sr">
         <h2>¿Listo para tu próxima escapada?</h2>
         <p>Contactanos ahora por WhatsApp y reservá tu fecha en Córdoba</p>
-        <a href="https://wa.me/5493516197404?text=Hola%20me%20interesa%20alquilar%20la%20casa%20de%20Córdoba%20por%20favor%20dame%20disponibilidad%20y%20precios" class="whatsapp-btn" target="_blank">
+        <a href="https://wa.me/5493489686939?text=Hola%20me%20interesa%20alquilar%20la%20casa%20de%20Córdoba%20por%20favor%20dame%20disponibilidad%20y%20precios" class="whatsapp-btn" target="_blank">
             <i class="fab fa-whatsapp" style="font-size:1.2rem"></i> Contactar por WhatsApp
         </a>
-        <p class="phone-text">📞 También podés llamar al 0351-619-7404</p>
+        <p class="phone-text">📞 También podés llamar al 03489-686-939</p>
     </div>
 </section>
 
-<!-- Footer -->
 <footer>
     <p>&copy; 2024 Casa Alquiler Córdoba. Todos los derechos reservados.</p>
     <p>Alquileres temporarios · Confort garantizado · Tu descanso merece un lugar con alma</p>
@@ -1568,7 +1569,6 @@
     </div>
 </footer>
 
-<!-- Toast -->
 <div class="toast" id="toast">
     <i class="fas fa-circle-exclamation"></i>
     <span id="toastMsg">Mensaje</span>
@@ -1667,7 +1667,7 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 document.querySelectorAll('.sr').forEach(el => revealObserver.observe(el));
 
-/* ===== ANIMATED REVIEW SCORE ===== */
+/* ===== ANIMATED SCORE ===== */
 const scoreNum = document.getElementById('scoreNum');
 let scoreAnimated = false;
 const scoreObserver = new IntersectionObserver((entries) => {
@@ -1675,11 +1675,8 @@ const scoreObserver = new IntersectionObserver((entries) => {
         if (entry.isIntersecting && !scoreAnimated) {
             scoreAnimated = true;
             animateScore(0, 4.8, 1200);
-            /* Animate bars */
             document.querySelectorAll('.bar-fill').forEach((bar, i) => {
-                setTimeout(() => {
-                    bar.style.width = bar.dataset.width + '%';
-                }, 300 + i * 100);
+                setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, 300 + i * 100);
             });
         }
     });
@@ -1697,6 +1694,116 @@ function animateScore(from, to, duration) {
     }
     requestAnimationFrame(update);
 }
+
+/* ===== ANIMATED TESTIMONIALS ===== */
+const testimonials = [
+    {
+        quote: "La atención al detalle y las comodidades de la casa superaron completamente nuestras expectativas. Es exactamente lo que buscábamos para descansar en Córdoba.",
+        name: "Sarah Chen",
+        designation: "Huésped frecuente · Visitó en Mayo 2025",
+        src: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=3560&auto=format&fit=crop",
+        stars: 5
+    },
+    {
+        quote: "La reserva fue súper sencilla y los resultados superaron lo que esperábamos. La flexibilidad de la casa para adaptarse a nuestro grupo fue notable.",
+        name: "Michael Rodriguez",
+        designation: "Huésped · Visitó en Abril 2025",
+        src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=3540&auto=format&fit=crop",
+        stars: 5
+    },
+    {
+        quote: "Esta casa mejoró significativamente la experiencia de nuestro viaje en familia. La interfaz intuitiva del hogar hace que todo sea simple y cómodo.",
+        name: "Emily Watson",
+        designation: "Viajó con familia · Visitó en Abril 2025",
+        src: "https://images.unsplash.com/photo-1623582854588-d60de57fa33f?q=80&w=3540&auto=format&fit=crop",
+        stars: 5
+    },
+    {
+        quote: "Atención destacada y servicios robustos. Es raro encontrar una propiedad que cumpla con todas sus promesas. Totalmente recomendable.",
+        name: "James Kim",
+        designation: "Huésped · Visitó en Marzo 2025",
+        src: "https://images.unsplash.com/photo-1636041293178-808a6762ab39?q=80&w=3464&auto=format&fit=crop",
+        stars: 5
+    },
+    {
+        quote: "La amplitud y el confort fueron determinantes para nuestra organización. Recomiendo esta casa a cualquier familia o grupo que visite Córdoba.",
+        name: "Lisa Thompson",
+        designation: "Viajó con amigos · Visitó en Febrero 2025",
+        src: "https://images.unsplash.com/photo-1624561172888-ac93c696e10c?q=80&w=2592&auto=format&fit=crop",
+        stars: 5
+    }
+];
+
+const atContainer = document.getElementById('atContainer');
+const atNav = document.getElementById('atNav');
+let atCurrent = 0;
+let atTimer = null;
+
+/* Build cards */
+testimonials.forEach((t, i) => {
+    const starsHTML = Array.from({length: 5}, (_, si) =>
+        `<i class="fas fa-star${si < t.stars ? '' : '-half-stroke'}"></i>`
+    ).join('');
+
+    const card = document.createElement('div');
+    card.className = 'at-card' + (i === 0 ? ' active' : '');
+    card.innerHTML = `
+        <div class="at-photo-wrap">
+            <div class="at-photo-glow"></div>
+            <img class="at-photo" src="${t.src}" alt="${t.name}" loading="lazy">
+        </div>
+        <div>
+            <div class="at-stars">${starsHTML}</div>
+            <p class="at-quote">${t.quote}</p>
+            <div class="at-author">
+                <div class="at-name">${t.name}</div>
+                <div class="at-designation">${t.designation}</div>
+            </div>
+        </div>
+    `;
+    atContainer.appendChild(card);
+
+    const dot = document.createElement('button');
+    dot.className = 'at-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Opinión de ${t.name}`);
+    dot.addEventListener('click', () => showAT(i));
+    atNav.appendChild(dot);
+});
+
+const atCards = atContainer.querySelectorAll('.at-card');
+const atDots = atNav.querySelectorAll('.at-dot');
+
+function showAT(n) {
+    if (n === atCurrent) return;
+    const prev = atCurrent;
+    atCurrent = n;
+
+    atCards[prev].classList.remove('active');
+    atCards[prev].classList.add('exit-up');
+    atDots[prev].classList.remove('active');
+
+    atCards[n].classList.remove('exit-up');
+    atCards[n].classList.add('active');
+    atDots[n].classList.add('active');
+
+    setTimeout(() => { atCards[prev].classList.remove('exit-up'); }, 700);
+    resetATTimer();
+}
+
+function nextAT() {
+    showAT((atCurrent + 1) % testimonials.length);
+}
+
+function resetATTimer() {
+    clearInterval(atTimer);
+    atTimer = setInterval(nextAT, 5000);
+}
+
+/* Pause on hover */
+atContainer.addEventListener('mouseenter', () => clearInterval(atTimer));
+atContainer.addEventListener('mouseleave', () => { atTimer = setInterval(nextAT, 5000); });
+
+atTimer = setInterval(nextAT, 5000);
 
 /* ===== RIPPLE ===== */
 document.querySelectorAll('.btn-primary, .cta-header, .whatsapp-btn, .form-submit').forEach(btn => {
@@ -1808,7 +1915,7 @@ form.addEventListener('submit', function(e) {
         formFields.style.display = 'none';
         formSuccess.classList.add('show');
         setTimeout(() => {
-            window.open(`https://wa.me/5493516197404?text=${encodeURIComponent(msg)}`, '_blank');
+            window.open(`https://wa.me/5493489686939?text=${encodeURIComponent(msg)}`, '_blank');
         }, 1200);
     }, 1500);
 });
@@ -1831,17 +1938,6 @@ document.querySelectorAll('.feature-card').forEach(card => {
         const rX = ((e.clientY - rect.top - rect.height/2) / (rect.height/2)) * -4;
         const rY = ((e.clientX - rect.left - rect.width/2) / (rect.width/2)) * 4;
         this.style.transform = `translateY(-10px) perspective(800px) rotateX(${rX}deg) rotateY(${rY}deg)`;
-    });
-    card.addEventListener('mouseleave', function() { this.style.transform = ''; });
-});
-
-/* ===== TILT ON REVIEW CARDS ===== */
-document.querySelectorAll('.review-card').forEach(card => {
-    card.addEventListener('mousemove', function(e) {
-        const rect = this.getBoundingClientRect();
-        const rX = ((e.clientY - rect.top - rect.height/2) / (rect.height/2)) * -3;
-        const rY = ((e.clientX - rect.left - rect.width/2) / (rect.width/2)) * 3;
-        this.style.transform = `translateY(-6px) perspective(800px) rotateX(${rX}deg) rotateY(${rY}deg)`;
     });
     card.addEventListener('mouseleave', function() { this.style.transform = ''; });
 });
